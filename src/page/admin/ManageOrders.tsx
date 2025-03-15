@@ -20,7 +20,7 @@ function ManageOrders() {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get<Order[]>("http://localhost:3000/orders");
+      const res = await axios.get<Order[]>("http://localhost:3001/orders");
       setOrders(res.data);
     } catch (err) {
       console.error("Lỗi khi tải đơn hàng:", err);
@@ -34,7 +34,7 @@ function ManageOrders() {
       if (!orderToUpdate) return;
 
       const updatedOrder = { ...orderToUpdate, status: newStatus };
-      await axios.put(`http://localhost:3000/orders/${id}`, updatedOrder);
+      await axios.put(`http://localhost:3001/orders/${id}`, updatedOrder);
 
       const updatedOrders = orders.map((order) =>
         order.id === id ? updatedOrder : order

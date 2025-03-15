@@ -23,7 +23,7 @@ function ManageCustomers() {
   const fetchCustomers = async () => {
     try {
       const res = await axios.get<Customer[]>(
-        "http://localhost:3000/customers"
+        "http://localhost:3001/customers"
       );
       setCustomers(res.data);
       setFilteredCustomers(res.data);
@@ -38,7 +38,7 @@ function ManageCustomers() {
   const handleDelete = async (id: string) => {
     if (confirm("Xác nhận xóa khách hàng?")) {
       try {
-        await axios.delete(`http://localhost:3000/customers/${id}`);
+        await axios.delete(`http://localhost:3001/customers/${id}`);
         fetchCustomers();
         message.success("Xóa khách hàng thành công!");
       } catch (err) {
