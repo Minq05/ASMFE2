@@ -1,29 +1,6 @@
 {
   "products": [
     {
-      "name": "Miss Dior EDP",
-      "stock": "99",
-      "category": "Nữ",
-      "brand": "Dior Sauvage ",
-      "image": "https://th.bing.com/th/id/OIP.8suCwWmxIKxLG2PYW8y5bQHaHa?w=186&h=186&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-      "description": "Nữ tính, dịu dàng với hoa hồng, mẫu đơn, vani.\t",
-      "volume": [
-        {
-          "type": "100ml",
-          "price": 250000
-        },
-        {
-          "type": "150ml",
-          "price": 280000
-        },
-        {
-          "type": "200ml",
-          "price": 310000
-        }
-      ],
-      "id": "d3c6"
-    },
-    {
       "id": "b038",
       "name": "Dior Homme Intense",
       "stock": 100,
@@ -574,6 +551,29 @@
         }
       ],
       "createdAt": "2025-03-12T13:46:30.445Z"
+    },
+    {
+      "name": "ăâê",
+      "stock": "3",
+      "category": "Nữ",
+      "brand": "ăâê",
+      "image": "ăâê",
+      "description": "123",
+      "volume": [
+        {
+          "type": "100ml",
+          "price": 250000
+        },
+        {
+          "type": "150ml",
+          "price": 280000
+        },
+        {
+          "type": "200ml",
+          "price": 310000
+        }
+      ],
+      "id": "k7Olcx5"
     }
   ],
   "orders": [

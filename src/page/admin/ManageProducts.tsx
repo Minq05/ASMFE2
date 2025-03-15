@@ -1,5 +1,5 @@
 // page/admin/ManageProducts.tsx
-import { Table, Button, Space, message } from "antd";
+import { Table, Button, Space, message, Image } from "antd";
 import { useEffect, useState } from "react";
 import { Product } from "../../type/type";
 import axios from "axios";
@@ -82,7 +82,7 @@ function ManageProducts() {
       dataIndex: "image",
       key: "image",
       render: (image: string) => (
-        <img
+        <Image
           src={image}
           alt="Product"
           style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 8 }}
