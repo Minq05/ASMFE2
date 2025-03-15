@@ -15,7 +15,6 @@ import Login from "./page/client/auth/Login";
 import Register from "./page/client/auth/Register";
 import LoginClient from "./page/client/auth/Login";
 import ClientLayout from "./page/client/layout/ClientLayout";
-import Cart from "./page/client/Cart";
 import Home from "./page/client/Home";
 
 const routesConfig = [
@@ -31,7 +30,7 @@ const routesConfig = [
     path: "/login-client",
     element: <LoginClient />,
   },
-  
+
   {
     path: "/admin",
     element: <AdminLayout />,
@@ -53,16 +52,8 @@ const routesConfig = [
   {
     path: "/",
     element: <ClientLayout />,
-    children: [
-      { path: "/", element: <Home /> },
-      { path: "/shop", element: <Shop /> },
-      { path: "/shop/:id", element: <ProductDetailClient /> },
-      { path: "/contact", element: <Contact /> },
-      { path: "/cart", element: <Cart /> },
-      { path: "/categories-product/:name", element: <CategoriesProduct /> },
-      { path: "*", element: <NotFoundClient /> },
-    ],
-  }
+    children: [{ path: "/", element: <Home /> }],
+  },
 ];
 
 function App() {
