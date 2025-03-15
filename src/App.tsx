@@ -1,5 +1,5 @@
 // src/App.tsx
-import { useRoutes } from "react-router-dom";
+import { useRoutes } from "react-router";
 import AdminLayout from "./page/admin/layout/AdminLayout";
 import Dashboard from "./page/admin/Dashboard";
 import ManageOrders from "./page/admin/ManageOrders";
@@ -11,8 +11,27 @@ import ProductDetail from "./page/admin/ProductDetail";
 import FormCategory from "./page/admin/form/FormCategory";
 import ManageOrderDetail from "./page/admin/OrderDetail";
 import CustomerHistory from "./page/admin/CustomerHistory";
+import Login from "./page/client/auth/Login";
+import Register from "./page/client/auth/Register";
+import LoginClient from "./page/client/auth/Login";
+import ClientLayout from "./page/client/layout/ClientLayout";
+import Cart from "./page/client/Cart";
+import Home from "./page/client/Home";
 
 const routesConfig = [
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/login-client",
+    element: <LoginClient />,
+  },
+  
   {
     path: "/admin",
     element: <AdminLayout />,
@@ -31,6 +50,19 @@ const routesConfig = [
       { path: "manage-product", element: <ManageProducts /> },
     ],
   },
+  {
+    path: "/",
+    element: <ClientLayout />,
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "/shop", element: <Shop /> },
+      { path: "/shop/:id", element: <ProductDetailClient /> },
+      { path: "/contact", element: <Contact /> },
+      { path: "/cart", element: <Cart /> },
+      { path: "/categories-product/:name", element: <CategoriesProduct /> },
+      { path: "*", element: <NotFoundClient /> },
+    ],
+  }
 ];
 
 function App() {
