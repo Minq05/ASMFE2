@@ -2,21 +2,22 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
 import { Navigation, Autoplay } from "swiper/modules";
 import { Link } from "react-router";
 import { Product } from "../../type/type";
 
 function Shop() {
-  const [products, setProduct] = useState <Product[]>([]);
+  const [products, setProduct] = useState<Product[]>([]);
   const [visibleCount, setVisibleCount] = useState(9);
 
   // Lọc 8 sản phẩm mới nhất theo createdAt
   const newestProducts = [...products]
-  .filter((p) => p.createdAt) // Lọc sản phẩm có createdAt hợp lệ
-  .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-  .slice(0, 8);
+    .filter((p) => p.createdAt) // Lọc sản phẩm có createdAt hợp lệ
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+    .slice(0, 8);
 
   const fetchProducts = async () => {
     try {
