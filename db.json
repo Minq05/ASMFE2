@@ -551,29 +551,6 @@
         }
       ],
       "createdAt": "2025-03-12T13:46:30.445Z"
-    },
-    {
-      "name": "ăâê",
-      "stock": "3",
-      "category": "Nữ",
-      "brand": "ăâê",
-      "image": "ăâê",
-      "description": "123",
-      "volume": [
-        {
-          "type": "100ml",
-          "price": 250000
-        },
-        {
-          "type": "150ml",
-          "price": 280000
-        },
-        {
-          "type": "200ml",
-          "price": 310000
-        }
-      ],
-      "id": "k7Olcx5"
     }
   ],
   "orders": [
