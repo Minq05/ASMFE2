@@ -17,6 +17,10 @@ import LoginClient from "./page/client/auth/Login";
 import ClientLayout from "./page/client/layout/ClientLayout";
 import Cart from "./page/client/Cart";
 import Home from "./page/client/Home";
+import CategoriesProduct from "./page/client/Categories";
+import Contact from "./page/client/Contact";
+import Shop from "./page/client/Shop";
+import NotFoundClient from "./page/client/NotFound";
 
 const routesConfig = [
   {
@@ -56,7 +60,7 @@ const routesConfig = [
     children: [
       { path: "/", element: <Home /> },
       { path: "/shop", element: <Shop /> },
-      { path: "/shop/:id", element: <ProductDetailClient /> },
+      { path: "/shop/:id", element: <ProductDetail /> },
       { path: "/contact", element: <Contact /> },
       { path: "/cart", element: <Cart /> },
       { path: "/categories-product/:name", element: <CategoriesProduct /> },
