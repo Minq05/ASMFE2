@@ -898,7 +898,7 @@
       "totalPrice": 250000,
       "paymentMethod": "COD",
       "bank": null,
-      "status": "Đang xử lý",
+      "status": "Thanh toán thành công",
       "createdAt": "2025-03-19T14:45:51.327Z",
       "id": 2
     },
@@ -917,7 +917,7 @@
       "totalPrice": 250000,
       "paymentMethod": "COD",
       "bank": null,
-      "status": "Đang xử lý",
+      "status": "Giao hàng thành công",
       "createdAt": "2025-03-19T14:47:11.038Z",
       "id": 3
     },
@@ -936,9 +936,28 @@
       "totalPrice": 250000,
       "paymentMethod": "COD",
       "bank": null,
-      "status": "Đang xử lý",
+      "status": "Thanh toán thành công",
       "createdAt": "2025-03-19T14:49:44.038Z",
       "id": 4
+    },
+    {
+      "userId": "xCJnSDK",
+      "items": [
+        {
+          "productId": "7752",
+          "productName": "Dior Addict EDP\t",
+          "volume": "100ml",
+          "quantity": 1,
+          "price": 250000,
+          "total": 250000
+        }
+      ],
+      "totalPrice": 250000,
+      "paymentMethod": "COD",
+      "bank": null,
+      "status": "Giao hàng thành công",
+      "createdAt": "2025-03-19T15:23:45.384Z",
+      "id": 6
     }
   ],
   "users": [
@@ -976,6 +995,16 @@
       "confirmPassword": "123123",
       "role": "staff",
       "id": "DxZzMhG"
+    },
+    {
+      "email": "ronaldo@gmail.com",
+      "password": "$2a$10$0WeHfQDKiKR.odfepL77quXyiB4o9yfnj8l/y8rKKzZUhL3bhMYr.",
+      "fullname": "Ronaldo ",
+      "phone": "0364017978",
+      "address": "Bồ Đào Nha",
+      "confirmPassword": "123123",
+      "role": "staff",
+      "id": "xCJnSDK"
     }
   ],
   "categories": [

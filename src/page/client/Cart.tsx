@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { CartItem } from "../../type/type";
 
 function Cart() {
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
@@ -123,8 +124,8 @@ function Cart() {
         </>
       )}
       <button onClick={() => navigate("/order-history")} className="mt-4 cursor-pointer bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
-            Xem lịch sử đơn hàng
-          </button>
+        Xem lịch sử đơn hàng
+      </button>
     </div>
   );
 }

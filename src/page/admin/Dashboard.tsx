@@ -17,16 +17,17 @@ import {
 } from "@ant-design/icons";
 import { motion } from "framer-motion";
 import API from "../../services/api";
+import { Order, Product, User } from "../../type/type";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 function Dashboard() {
-  const [totalProducts, setTotalProducts] = useState(0);
-  const [totalOrders, setTotalOrders] = useState(0);
+  const [totalProducts, setTotalProducts] = useState<Product[]>([]);
+  const [totalOrders, setTotalOrders] = useState<Order[]>([]);
   const [totalCustomers, setTotalCustomers] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [deliveredCount, setDeliveredCount] = useState(0);
-  const [processingCount, setProcessingCount] = useState(0);
+  const [, setDeliveredCount] = useState(0);
+  const [, setProcessingCount] = useState(0);
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
@@ -38,7 +39,10 @@ function Dashboard() {
 
         setTotalProducts(resProducts.data.length);
         setTotalOrders(resOrders.data.length);
-        setTotalCustomers(resUsers.data.length);
+        
+        // Lấy số lượng tài khoản có role là "staff"
+        const staffUsers = resUsers.data.filter(user => user.role === "staff").length;
+        setTotalCustomers(staffUsers);
 
         const revenue = resOrders.data.reduce(
           (sum, order) => sum + (order.totalPrice || 0),
@@ -84,25 +88,25 @@ function Dashboard() {
       <Title level={2}>Tổng quan</Title>
       <Row gutter={[16, 16]}>
         {[{
-            title: "Tổng đơn hàng",
-            value: totalOrders,
-            icon: <ShoppingCartOutlined style={{ color: "#1677ff" }} />,
-          },
-          {
-            title: "Sản phẩm",
-            value: totalProducts,
-            icon: <BoxPlotOutlined style={{ color: "#52c41a" }} />,
-          },
-          {
-            title: "Khách hàng",
-            value: totalCustomers,
-            icon: <UserOutlined style={{ color: "#faad14" }} />,
-          },
-          {
-            title: "Doanh thu (₫)",
-            value: totalRevenue.toLocaleString(),
-            icon: <DollarOutlined style={{ color: "#ff4d4f" }} />,
-          },
+          title: "Tổng đơn hàng",
+          value: totalOrders,
+          icon: <ShoppingCartOutlined style={{ color: "#1677ff" }} />,
+        },
+        {
+          title: "Sản phẩm",
+          value: totalProducts,
+          icon: <BoxPlotOutlined style={{ color: "#52c41a" }} />,
+        },
+        {
+          title: "Khách hàng (Staff)",
+          value: totalCustomers,
+          icon: <UserOutlined style={{ color: "#faad14" }} />,
+        },
+        {
+          title: "Doanh thu (₫)",
+          value: totalRevenue.toLocaleString(),
+          icon: <DollarOutlined style={{ color: "#ff4d4f" }} />,
+        },
         ].map((item, index) => (
           <Col xs={24} sm={12} md={12} lg={6} key={index}>
             <motion.div
