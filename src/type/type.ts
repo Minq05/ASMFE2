@@ -12,17 +12,13 @@ export interface Order {
   status: "Đã giao" | "Đang xử lý" | "Đã hủy" | string; // có thể mở rộng nếu có thêm status khác
 }
 
-export interface Customer {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-}
-
 export interface User {
   id: string;
-  username: string;
+  fullname: string;
+  phone: string;
+  address: string;
+  confirmPassword: string;
+  email: string;
   password: string;
   role: "admin" | "staff" | string; // mở rộng nếu có thêm quyền
 }
@@ -48,4 +44,15 @@ export interface Product {
   image: string;
   description: string;
   createdAt: string;
+  key: string
+}
+
+export interface CartItem {
+  id: number;
+  productId: number;
+  productName: string;
+  quantity: number;
+  price: number;
+  total: number;
+  userId: number;
 }

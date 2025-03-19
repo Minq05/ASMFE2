@@ -3,15 +3,15 @@ import axios from "axios";
 import { Table, Input, Button, message, Typography } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
-import { Customer } from "../../type/type";
+import { Customer, User } from "../../type/type";
 import { motion } from "framer-motion";
 
 const { Title } = Typography;
 const { Search } = Input;
 
 function ManageCustomers() {
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
+  const [customers, setCustomers] = useState<User[]>([]);
+  const [filteredCustomers, setFilteredCustomers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
@@ -21,11 +21,10 @@ function ManageCustomers() {
 
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get<Customer[]>(
-        "http://localhost:3001/customers"
-      );
-      setCustomers(res.data);
-      setFilteredCustomers(res.data);
+      const res = await axios.get<User[]>("http://localhost:8000/users");
+      const staffUsers = res.data.filter((user) => user.role === "staff");
+      setCustomers(staffUsers);
+      setFilteredCustomers(staffUsers);
     } catch (err) {
       console.error("Lỗi khi tải danh sách khách hàng:", err);
       message.error("Lỗi khi tải khách hàng!");
@@ -34,10 +33,11 @@ function ManageCustomers() {
     }
   };
 
+
   const handleDelete = async (id: string) => {
     if (confirm("Xác nhận xóa khách hàng?")) {
       try {
-        await axios.delete(`http://localhost:3001/customers/${id}`);
+        await axios.delete(`http://localhost:8000/customers/${id}`);
         fetchCustomers();
         message.success("Xóa khách hàng thành công!");
       } catch (err) {
@@ -65,8 +65,8 @@ function ManageCustomers() {
     },
     {
       title: "Tên khách hàng",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "fullname",
+      key: "fullname",
     },
     {
       title: "Email",
@@ -98,7 +98,7 @@ function ManageCustomers() {
             Xóa
           </Button>
           <Link
-            to={`/admin/customer-history/${encodeURIComponent(record.name)}`}
+            to={`/admin/customer-history/${encodeURIComponent(record.fullname)}`}
           >
             <Button type="primary" size="small" ghost>
               History

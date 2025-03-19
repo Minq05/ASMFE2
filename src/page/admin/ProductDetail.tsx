@@ -13,7 +13,7 @@ function ProductDetail() {
 
   const fetchProductDetail = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:3001/products/${id}`);
+      const { data } = await axios.get(`http://localhost:8000/products/${id}`);
       setProduct(data);
     } catch (error) {
       console.error("Lỗi lấy chi tiết sản phẩm:", error);

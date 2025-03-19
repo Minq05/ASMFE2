@@ -11,16 +11,25 @@ import ProductDetail from "./page/admin/ProductDetail";
 import FormCategory from "./page/admin/form/FormCategory";
 import ManageOrderDetail from "./page/admin/OrderDetail";
 import CustomerHistory from "./page/admin/CustomerHistory";
-import Login from "./page/client/auth/Login";
-import Register from "./page/client/auth/Register";
-import LoginClient from "./page/client/auth/Login";
 import ClientLayout from "./page/client/layout/ClientLayout";
 import Home from "./page/client/Home";
+import Shop from "./page/client/Shop";
+import CategoriesProduct from "./page/client/Categories";
+import Cart from "./page/client/Cart";
+import ProductDetailClient from "./page/client/DetailProduct";
+import RequireAuth from "./components/RequireAuth";
+import LoginClient from "./page/client/auth/Login";
+import Register from "./page/client/auth/Register";
+import LoginAdmin from "./page/admin/auth/Login";
+import Contact from "./page/client/Contact";
+import PaymentPage from "./page/client/PaymentPage";
+import PaymentSuccess from "./page/client/PaymentSuccess";
+import OrderHistory from "./page/client/OrderHistory";
 
 const routesConfig = [
   {
-    path: "/login",
-    element: <Login />,
+    path: "/admin/login",
+    element: <LoginAdmin />,
   },
   {
     path: "/register",
@@ -33,7 +42,9 @@ const routesConfig = [
 
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: <RequireAuth>
+      <AdminLayout />
+    </RequireAuth>,
     children: [
       { index: true, element: <Dashboard /> },
       { path: "manage-order", element: <ManageOrders /> },
@@ -52,7 +63,16 @@ const routesConfig = [
   {
     path: "/",
     element: <ClientLayout />,
-    children: [{ path: "/", element: <Home /> }],
+    children: [{ path: "/", element: <Home /> },
+    { path: "shop", element: <Shop /> },
+    { path: "shop/:id", element: <ProductDetailClient /> },
+    { path: "categories-product/:name", element: <CategoriesProduct /> },
+    { path: "cart", element: <Cart /> },
+    { path: "contact", element: <Contact /> },
+    { path: "payment", element: <PaymentPage /> },
+    { path: "payment-success", element: <PaymentSuccess /> },
+    { path: "order-history", element: <OrderHistory /> },
+    ],
   },
 ];
 

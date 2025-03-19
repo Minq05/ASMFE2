@@ -11,7 +11,7 @@ function ManageCategories() {
 
   const fetchCategories = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3001/categories");
+      const { data } = await axios.get("http://localhost:8000/categories");
       setCategories(data);
     } catch (error) {
       console.error("Lỗi lấy danh mục:", error);
@@ -21,7 +21,7 @@ function ManageCategories() {
   const handleDelete = async (id: string) => {
     if (confirm("Bạn có chắc chắn muốn xoá danh mục này?")) {
       try {
-        await axios.delete(`http://localhost:3001/categories/${id}`);
+        await axios.delete(`http://localhost:8000/categories/${id}`);
         fetchCategories();
       } catch (error) {
         console.error("Lỗi xoá danh mục:", error);

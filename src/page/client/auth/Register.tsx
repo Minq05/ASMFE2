@@ -16,14 +16,14 @@ function Register() {
 
   const onSubmitForm: SubmitHandler<User> = async (data) => {
     try {
-      // call api
-      await axios.post("http://localhost:3000/register", data);
+      await axios.post("http://localhost:8000/users", { ...data, role: "staff" });
       toast.success("Đăng ký thành công!");
       nav("/login-client");
     } catch (error) {
       console.log(error);
     }
   };
+
 
   return (
     <div
@@ -140,7 +140,7 @@ function Register() {
 
           <button
             type="submit"
-            className="w-full bg-black hover:bg-gray-600 text-white py-2 rounded-md"
+            className="w-full bg-black hover:bg-gray-600 text-white py-2 rounded-md cursor-pointer"
           >
             Đăng ký
           </button>

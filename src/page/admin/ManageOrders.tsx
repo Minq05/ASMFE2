@@ -1,136 +1,83 @@
-// pages/admin/ManageOrders.tsx
 import { useEffect, useState } from "react";
+import { Table, Select, message } from "antd";
 import axios from "axios";
-import { Table, Select, Button, message, Typography } from "antd";
-import { ColumnsType } from "antd/es/table";
-import { useNavigate } from "react-router-dom";
-import { Order } from "../../type/type";
-import { motion } from "framer-motion";
+import { Order, User } from "../../type/type";
 
-const { Title } = Typography;
 const { Option } = Select;
 
-function ManageOrders() {
+const ManageOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const navigate = useNavigate();
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     fetchOrders();
+    fetchUsers();
   }, []);
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get<Order[]>("http://localhost:3001/orders");
+      const res = await axios.get("http://localhost:8000/orders");
       setOrders(res.data);
-    } catch (err) {
-      console.error("Lỗi khi tải đơn hàng:", err);
-      message.error("Lỗi khi tải đơn hàng!");
+    } catch (error) {
+      console.log(error);
+      message.error("Lỗi khi tải đơn hàng");
     }
   };
 
-  const handleStatusChange = async (id: string, newStatus: string) => {
+  const fetchUsers = async () => {
     try {
-      const orderToUpdate = orders.find((order) => order.id === id);
-      if (!orderToUpdate) return;
-
-      const updatedOrder = { ...orderToUpdate, status: newStatus };
-      await axios.put(`http://localhost:3001/orders/${id}`, updatedOrder);
-
-      const updatedOrders = orders.map((order) =>
-        order.id === id ? updatedOrder : order
-      );
-      setOrders(updatedOrders);
-      message.success("Cập nhật trạng thái đơn hàng thành công!");
-    } catch (err) {
-      console.error("Lỗi khi cập nhật trạng thái:", err);
-      message.error("Lỗi khi cập nhật trạng thái!");
+      const res = await axios.get("http://localhost:8000/users");
+      setUsers(res.data);
+    } catch (error) {
+      console.log(error);
+      message.error("Lỗi khi tải danh sách người dùng");
     }
   };
 
-  const columns: ColumnsType<Order> = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-      render: (_, __, index) => index + 1,
-    },
-    {
-      title: "Khách hàng",
-      dataIndex: "customerName",
-      key: "customerName",
-    },
-    {
-      title: "Sản phẩm",
-      dataIndex: "productName",
-      key: "productName",
-    },
-    {
-      title: "Số lượng",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Đơn giá",
-      dataIndex: "price",
-      key: "price",
-      render: (price: number) => `${price.toLocaleString()}₫`,
-    },
-    {
-      title: "Tổng tiền",
-      dataIndex: "total",
-      key: "total",
-      render: (total: number) => `${total.toLocaleString()}₫`,
-    },
+  const getUserName = (userId) => {
+    const user = users.find((u) => u.id === userId);
+    return user ? user.fullname : "Không xác định";
+  };
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      await axios.patch(`http://localhost:8000/orders/${orderId}`, { status: newStatus });
+      setOrders(orders.map(order => order.id === orderId ? { ...order, status: newStatus } : order));
+      message.success("Cập nhật trạng thái thành công");
+    } catch (error) {
+      console.log(error);
+      message.error("Lỗi khi cập nhật trạng thái");
+    }
+  };
+
+  const columns = [
+    { title: "Mã đơn hàng", dataIndex: "id", key: "id" },
+    { title: "Người mua", dataIndex: "userId", key: "userId", render: getUserName },
+    { title: "Tổng tiền", dataIndex: "totalPrice", key: "totalPrice", render: price => `${price.toLocaleString()} VND` },
+    { title: "Phương thức thanh toán", dataIndex: "paymentMethod", key: "paymentMethod" },
     {
       title: "Trạng thái",
+      dataIndex: "status",
       key: "status",
-      render: (_, record: Order) => (
-        <Select
-          value={record.status}
-          onChange={(value) => handleStatusChange(record.id, value)}
-          style={{ width: 120 }}
-        >
-          <Option value="Chờ xử lý">Chờ xử lý</Option>
-          <Option value="Đang giao">Đang giao</Option>
-          <Option value="Đã giao">Đã giao</Option>
+      render: (status, record) => (
+        <Select defaultValue={status} onChange={newStatus => handleStatusChange(record.id, newStatus)}>
+          <Option value="Đang xử lý">Đang xử lý</Option>
+          <Option value="Đang xử lý">Thanh toán thành công</Option>
+          <Option value="Đang xử lý">Đang giao hàng</Option>
+          <Option value="Đang xử lý">Chưa thanh toán</Option>
+          <Option value="Đang xử lý">Giao hàng thành công</Option>
         </Select>
-      ),
+      )
     },
-    {
-      title: "Hành động",
-      key: "actions",
-      render: (_, record: Order) => (
-        <Button
-          type="primary"
-          size="small"
-          onClick={() => navigate(`/admin/manage-orders/${record.id}`)}
-        >
-          Chi tiết
-        </Button>
-      ),
-    },
+    { title: "Ngày đặt hàng", dataIndex: "createdAt", key: "createdAt" }
   ];
 
   return (
     <div>
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-      >
-        <Title level={3} style={{ marginBottom: 20 }}>
-          Quản lý đơn hàng
-        </Title>
-        <Table
-          dataSource={orders}
-          columns={columns}
-          rowKey="id"
-          pagination={{ pageSize: 6 }}
-          bordered
-        />
-      </motion.div>
+      <h2>Quản lý đơn hàng</h2>
+      <Table columns={columns} dataSource={orders} rowKey="id" />
     </div>
   );
-}
+};
 
 export default ManageOrders;

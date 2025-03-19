@@ -19,7 +19,7 @@ function Shop() {
 
     const fetchProducts = async () => {
         try {
-            const { data } = await axios.get("http://localhost:3000/products");
+            const { data } = await axios.get("http://localhost:8000/products");
             setProducts(data);
         } catch (error) {
             console.error(error);

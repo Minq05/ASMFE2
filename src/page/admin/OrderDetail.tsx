@@ -19,7 +19,7 @@ function ManageOrderDetail() {
 
   const fetchOrderDetail = async () => {
     try {
-      const res = await axios.get<Order>(`http://localhost:3001/orders/${id}`);
+      const res = await axios.get<Order>(`http://localhost:8000/orders/${id}`);
       setOrder(res.data);
     } catch (error) {
       console.error("Lỗi khi tải đơn hàng:", error);

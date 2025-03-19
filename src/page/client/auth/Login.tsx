@@ -2,8 +2,18 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 import { User } from "../../../type/type";
-import { useNavigate } from "react-router-dom"; // sửa đúng router package
+
+// Type cho response trả về từ API
+type LoginResponse = {
+  accessToken: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
+};
 
 function LoginClient() {
   const {
@@ -15,13 +25,28 @@ function LoginClient() {
 
   const onSubmitForm: SubmitHandler<User> = async (data) => {
     try {
-      // call api
-      const res = await axios.post("http://localhost:3000/login", data);
+      const res = await axios.post<LoginResponse>(
+        "http://localhost:8000/login",
+        data
+      );
+
       toast.success("Đăng nhập thành công!");
-      localStorage.setItem("user", res.data.accessToken);
+
+      // Tạo object user lưu vào localStorage
+      const userData = {
+        id: res.data.user.id,
+        name: res.data.user.name,
+        email: res.data.user.email,
+        accessToken: res.data.accessToken,
+      };
+
+      // Lưu JSON string vào localStorage
+      localStorage.setItem("user", JSON.stringify(userData));
+
       nav("/");
     } catch (error) {
       console.log(error);
+      toast.error("Đăng nhập thất bại!");
     }
   };
 

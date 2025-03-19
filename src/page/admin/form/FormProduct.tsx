@@ -18,7 +18,7 @@ const FormProduct: React.FC = () => {
   // Lấy danh sách danh mục
   const fetchCategories = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3001/categories");
+      const { data } = await axios.get("http://localhost:8000/categories");
       setCategories(data);
       setLoadingSelect(false);
     } catch (error) {
@@ -29,7 +29,7 @@ const FormProduct: React.FC = () => {
   // Lấy dữ liệu sản phẩm nếu có id
   const fetchProductId = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:3001/products/${id}`);
+      const { data } = await axios.get(`http://localhost:8000/products/${id}`);
       const fixedData = {
         ...data,
         category:
@@ -68,10 +68,10 @@ const FormProduct: React.FC = () => {
 
     try {
       if (id) {
-        await axios.put(`http://localhost:3001/products/${id}`, newProduct);
+        await axios.put(`http://localhost:8000/products/${id}`, newProduct);
         message.success("✔️ Cập nhật sản phẩm thành công!");
       } else {
-        await axios.post("http://localhost:3001/products", newProduct);
+        await axios.post("http://localhost:8000/products", newProduct);
         message.success("✔️ Thêm sản phẩm thành công!");
       }
       form.resetFields();

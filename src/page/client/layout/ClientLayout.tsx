@@ -1,6 +1,24 @@
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
+import { toast, ToastContainer } from "react-toastify";
+import { useEffect, useState } from "react";
 
 function ClientLayout() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Kiểm tra trạng thái đăng nhập từ localStorage
+    const user = localStorage.getItem("user");
+    setIsLoggedIn(!!user);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    toast.success("Đăng xuất thành công!");
+    navigate("/"); // Chuyển về trang Home sau khi logout
+  };
+
   return (
     <div>
       {/* Header & nav  */}
@@ -42,12 +60,21 @@ function ClientLayout() {
             </nav>
           </div>
           <div className="space-x-4">
-            <a
-              href="/login-client"
-              className="bg-orange-500 text-white p-6 px-4 py-2 rounded-full hover:bg-orange-600 transition"
-            >
-              Sign in
-            </a>
+            {isLoggedIn ? (
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition"
+              >
+                Log out
+              </button>
+            ) : (
+              <a
+                href="/login-client"
+                className="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition"
+              >
+                Sign in
+              </a>
+            )}
             <a
               href="/cart"
               className="text-gray-700 hover:text-orange-500 transition"
@@ -62,11 +89,12 @@ function ClientLayout() {
         <Outlet />
       </div>
 
-      {/* Footer */}
+      <ToastContainer position="top-right" autoClose={3000} />
       <footer className="bg-blue-900 text-white mt-10 text-center">
         <p className="mt-4 bg-black text-white py-2">© Content footer</p>
       </footer>
     </div>
   );
 }
+
 export default ClientLayout;

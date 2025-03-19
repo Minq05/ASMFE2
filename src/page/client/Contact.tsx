@@ -62,7 +62,7 @@ function Contact() {
                 defaultValue={""}
               />
             </div>
-            <button className="mt-6 w-full bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition shadow-lg">
+            <button className="mt-6 w-full cursor-pointer bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition shadow-lg">
               Liên hệ
             </button>
           </form>

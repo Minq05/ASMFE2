@@ -1,24 +1,22 @@
-import { Button, Form, Input, Card, message, Select, Spin } from "antd";
+import { Button, Form, Input, Card, message, Spin } from "antd";
 import type { FormProps } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Category } from "../../../type/type";
 
-const { Option } = Select;
-
 const FormCategory: React.FC = () => {
   const [form] = Form.useForm();
   const nav = useNavigate();
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [, setCategories] = useState<Category[]>([]);
 
   // Lấy dữ liệu danh mục nếu có id
   const fetchCategoryById = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:3001/categories/${id}`
+        `http://localhost:8000/categories/${id}`
       );
       form.setFieldsValue(data);
     } catch (error) {
@@ -29,7 +27,7 @@ const FormCategory: React.FC = () => {
   // Lấy danh sách danh mục
   const fetchCategories = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3001/categories");
+      const { data } = await axios.get("http://localhost:8000/categories");
       setCategories(data);
     } catch (error) {
       console.error("Lỗi lấy danh mục:", error);
@@ -60,10 +58,10 @@ const FormCategory: React.FC = () => {
 
     try {
       if (id) {
-        await axios.put(`http://localhost:3001/categories/${id}`, newCategory);
+        await axios.put(`http://localhost:8000/categories/${id}`, newCategory);
         message.success("Cập nhật danh mục thành công!");
       } else {
-        await axios.post("http://localhost:3001/categories", newCategory);
+        await axios.post("http://localhost:8000/categories", newCategory);
         message.success("Thêm danh mục mới thành công!");
         nav("/admin/manage-category");
       }

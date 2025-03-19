@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 const { Header, Sider, Content, Footer } = Layout;
 
@@ -33,6 +34,12 @@ function AdminLayout() {
   };
 
   const darkMode = isDarkMode ? <MoonOutlined /> : <SunOutlined />;
+
+  const handleLogout = () => {
+    localStorage.removeItem("adminUser");
+    toast.success("Đăng xuất thành công!");
+    window.location.href = "/admin/login";
+  };
 
   return (
     <ConfigProvider
@@ -104,7 +111,6 @@ function AdminLayout() {
             }}
           >
             <div>ASSIGNMENT FE2</div>
-
             <div>
               {darkMode}
               <Switch
@@ -112,6 +118,9 @@ function AdminLayout() {
                 onChange={handleToggleDarkMode}
                 style={{ marginLeft: 8 }}
               />
+              <button onClick={handleLogout} className=" mx-5 text-red-500 cursor-pointer hover:text-xl hover:font-extrabold transition">
+                Đăng xuất
+              </button>
             </div>
           </Header>
 
@@ -125,7 +134,7 @@ function AdminLayout() {
           >
             <Outlet />
           </Content>
-
+          <ToastContainer />
           <Footer
             style={{
               textAlign: "center",

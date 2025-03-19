@@ -13,7 +13,7 @@ function Home() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3000/products");
+      const { data } = await axios.get("http://localhost:8000/products");
       setProduct(data);
     } catch (error) {
       console.log(error);
@@ -23,7 +23,7 @@ function Home() {
 
   const fetchCategories = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3000/categories");
+      const { data } = await axios.get("http://localhost:8000/categories");
       setCategories(data);
     } catch (error) {
       console.log(error);
@@ -42,7 +42,7 @@ function Home() {
       }
     }
 
-    const intervalId = setInterval(showNextSlide, 3000);
+    const intervalId = setInterval(showNextSlide, 8000);
     return () => clearInterval(intervalId);
   };
 

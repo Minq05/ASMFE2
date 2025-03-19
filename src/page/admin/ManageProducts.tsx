@@ -12,7 +12,7 @@ function ManageProducts() {
 
   const fetchProduct = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3001/products");
+      const { data } = await axios.get("http://localhost:8000/products");
       setProducts(data);
     } catch (error) {
       console.error("Lỗi lấy sản phẩm:", error);
@@ -34,7 +34,7 @@ function ManageProducts() {
   const handleDelete = async (id: string) => {
     if (confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
       try {
-        await axios.delete(`http://localhost:3001/products/${id}`);
+        await axios.delete(`http://localhost:8000/products/${id}`);
         message.success("Đã xoá sản phẩm thành công!");
         fetchProduct(); // Cập nhật lại danh sách
       } catch (error) {

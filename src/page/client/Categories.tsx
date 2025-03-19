@@ -20,7 +20,7 @@ const CategoriesProduct = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/products");
+      const res = await axios.get("http://localhost:8000/products");
       setProducts(res.data);
     } catch (err) {
       console.error("Lỗi khi tải sản phẩm:", err);
