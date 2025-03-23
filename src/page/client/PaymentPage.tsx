@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const banks = [
     { id: "vietcombank", name: "Vietcombank", logo: "https://www.bing.com/th?id=OIP.FCOsyWba4BiGoSt5jPl1dgHaFj&w=254&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2" },
@@ -49,16 +49,18 @@ function PaymentPage() {
                 status: selectedPayment === "credit_card" ? "Thanh toán thành công" : "Đang xử lý",
                 createdAt: new Date().toISOString(),
             };
-
             await axios.post("http://localhost:8000/orders", newOrder);
-            toast.success("Đơn hàng đã được tạo thành công!");
 
+            // Reset giỏ hàng
+            localStorage.removeItem("cart"); // Nếu giỏ hàng lưu trong localStorage
             navigate("/payment-success", { state: { totalPrice, cartItems } });
+            toast.success("Đơn hàng đã được tạo thành công!");
         } catch (error) {
             console.error("Lỗi khi thanh toán:", error);
             toast.error("Thanh toán thất bại, vui lòng thử lại!");
         }
     };
+
 
     return (
         <div className="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
@@ -99,8 +101,8 @@ function PaymentPage() {
                     </div>
                 </>
             )}
-
             <button onClick={handlePayment} className="mt-4 cursor-pointer bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition">Xác nhận thanh toán</button>
+            <ToastContainer />
         </div>
     );
 }

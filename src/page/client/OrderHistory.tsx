@@ -58,7 +58,7 @@ function OrderHistory() {
                     ))}
                 </ul>
             )}
-            <button onClick={() => navigate("/cart")} className="mt-4 bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
+            <button onClick={() => navigate("/cart")} className="mt-4 cursor-pointer bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
                 Quay lại giỏ hàng
             </button>
         </div>

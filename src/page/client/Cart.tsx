@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { CartItem } from "../../type/type";
 
 function Cart() {
@@ -36,8 +36,11 @@ function Cart() {
     fetchCart();
   }, [user]);
 
-  const updateCart = async (updatedItems) => {
-    if (!user) return;
+  const updateCart = async (updatedItems: any) => {
+    if (!user) {
+      await axios.put(`http://localhost:8000/orders/${user.id}`, { items: [] });
+      setCartItems([]);
+    }
 
     try {
       const res = await axios.get(`http://localhost:8000/orders?userId=${user.id}`);
@@ -53,14 +56,14 @@ function Cart() {
     }
   };
 
-  const handleIncrease = (index) => {
+  const handleIncrease = (index: any) => {
     const updatedCart = [...cartItems];
     updatedCart[index].quantity += 1;
     updatedCart[index].total = updatedCart[index].quantity * updatedCart[index].price;
     updateCart(updatedCart);
   };
 
-  const handleDecrease = (index) => {
+  const handleDecrease = (index: any) => {
     const updatedCart = [...cartItems];
     if (updatedCart[index].quantity > 1) {
       updatedCart[index].quantity -= 1;
@@ -71,7 +74,7 @@ function Cart() {
     }
   };
 
-  const handleRemove = (index) => {
+  const handleRemove = (index: any) => {
     const updatedCart = cartItems.filter((_, i) => i !== index);
     updateCart(updatedCart);
   };
@@ -126,6 +129,7 @@ function Cart() {
       <button onClick={() => navigate("/order-history")} className="mt-4 cursor-pointer bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
         Xem lịch sử đơn hàng
       </button>
+      <ToastContainer />
     </div>
   );
 }

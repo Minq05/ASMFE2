@@ -874,78 +874,30 @@
   ],
   "orders": [
     {
-      "userId": "lQo1Gsg",
-      "items": [],
-      "id": 1,
-      "totalPrice": 500000,
+      "userId": "xCJnSDK",
+      "items": [
+        {
+          "productId": "b038",
+          "productName": "Dior Homme Intense",
+          "volume": "100ml",
+          "quantity": 1,
+          "price": 250000,
+          "total": 250000
+        }
+      ],
+      "totalPrice": 250000,
       "paymentMethod": "Credit Card",
-      "bank": "bidv",
+      "bank": "vietcombank",
       "status": "Thanh toán thành công",
-      "createdAt": "2025-03-19T14:36:10.022Z"
-    },
-    {
-      "userId": "lQo1Gsg",
-      "items": [
-        {
-          "productId": "b038",
-          "productName": "Dior Homme Intense",
-          "volume": "100ml",
-          "quantity": 1,
-          "price": 250000,
-          "total": 250000
-        }
-      ],
-      "totalPrice": 250000,
-      "paymentMethod": "COD",
-      "bank": null,
-      "status": "Thanh toán thành công",
-      "createdAt": "2025-03-19T14:45:51.327Z",
+      "createdAt": "2025-03-23T03:52:46.213Z",
       "id": 2
-    },
-    {
-      "userId": "lQo1Gsg",
-      "items": [
-        {
-          "productId": "b038",
-          "productName": "Dior Homme Intense",
-          "volume": "100ml",
-          "quantity": 1,
-          "price": 250000,
-          "total": 250000
-        }
-      ],
-      "totalPrice": 250000,
-      "paymentMethod": "COD",
-      "bank": null,
-      "status": "Giao hàng thành công",
-      "createdAt": "2025-03-19T14:47:11.038Z",
-      "id": 3
-    },
-    {
-      "userId": "lQo1Gsg",
-      "items": [
-        {
-          "productId": "7752",
-          "productName": "Dior Addict EDP\t",
-          "volume": "100ml",
-          "quantity": 1,
-          "price": 250000,
-          "total": 250000
-        }
-      ],
-      "totalPrice": 250000,
-      "paymentMethod": "COD",
-      "bank": null,
-      "status": "Thanh toán thành công",
-      "createdAt": "2025-03-19T14:49:44.038Z",
-      "id": 4
     },
     {
       "userId": "xCJnSDK",
       "items": [
         {
-          "productId": "7752",
-          "productName": "Dior Addict EDP\t",
+          "productId": "b038",
+          "productName": "Dior Homme Intense",
           "volume": "100ml",
           "quantity": 1,
           "price": 250000,
@@ -955,9 +907,9 @@
       "totalPrice": 250000,
       "paymentMethod": "COD",
       "bank": null,
-      "status": "Giao hàng thành công",
-      "createdAt": "2025-03-19T15:23:45.384Z",
-      "id": 6
+      "status": "Đang xử lý",
+      "createdAt": "2025-03-23T03:53:01.126Z",
+      "id": 3
     }
   ],
   "users": [

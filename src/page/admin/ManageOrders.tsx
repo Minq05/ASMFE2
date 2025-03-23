@@ -81,9 +81,8 @@ const ManageOrders = () => {
         <Select defaultValue={status} onChange={newStatus => handleStatusChange(record.id, newStatus)}>
           <Option value="Đang xử lý">Đang xử lý</Option>
           <Option value="Thanh toán thành công">Thanh toán thành công</Option>
-          <Option value="Đang giao hàng">Đang giao hàng</Option>
+          <Option value="Đang giao hàng">Hoàn tất mua hàng</Option>
           <Option value="Chưa thanh toán">Chưa thanh toán</Option>
-          <Option value="Giao hàng thành công">Giao hàng thành công</Option>
         </Select>
       )
     },
