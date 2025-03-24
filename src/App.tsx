@@ -25,26 +25,23 @@ import Contact from "./page/client/Contact";
 import PaymentPage from "./page/client/PaymentPage";
 import PaymentSuccess from "./page/client/PaymentSuccess";
 import OrderHistory from "./page/client/OrderHistory";
+import NotFound from "./page/client/NotFound";
+import NotFoundAdmin from "./page/admin/NotFound";
 
 const routesConfig = [
-  {
-    path: "/admin/login",
-    element: <LoginAdmin />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/login-client",
-    element: <LoginClient />,
-  },
+  // Route đăng nhập, đăng ký
+  { path: "/admin/login", element: <LoginAdmin /> },
+  { path: "/register", element: <Register /> },
+  { path: "/login-client", element: <LoginClient /> },
 
+  // Route ADMIN
   {
     path: "/admin",
-    element: <RequireAuth>
-      <AdminLayout />
-    </RequireAuth>,
+    element: (
+      <RequireAuth>
+        <AdminLayout />
+      </RequireAuth>
+    ),
     children: [
       { index: true, element: <Dashboard /> },
       { path: "manage-order", element: <ManageOrders /> },
@@ -58,23 +55,31 @@ const routesConfig = [
       { path: "product-detail/:id", element: <ProductDetail /> },
       { path: "manage-category", element: <ManageCategories /> },
       { path: "manage-product", element: <ManageProducts /> },
+      // NotFound riêng cho Admin
+      { path: "*", element: <NotFoundAdmin /> },
     ],
   },
+
+  // Route CLIENT
   {
     path: "/",
     element: <ClientLayout />,
-    children: [{ path: "/", element: <Home /> },
-    { path: "shop", element: <Shop /> },
-    { path: "shop/:id", element: <ProductDetailClient /> },
-    { path: "categories-product/:name", element: <CategoriesProduct /> },
-    { path: "cart", element: <Cart /> },
-    { path: "contact", element: <Contact /> },
-    { path: "payment", element: <PaymentPage /> },
-    { path: "payment-success", element: <PaymentSuccess /> },
-    { path: "order-history", element: <OrderHistory /> },
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "shop", element: <Shop /> },
+      { path: "shop/:id", element: <ProductDetailClient /> },
+      { path: "categories-product/:name", element: <CategoriesProduct /> },
+      { path: "cart", element: <Cart /> },
+      { path: "contact", element: <Contact /> },
+      { path: "payment", element: <PaymentPage /> },
+      { path: "payment-success", element: <PaymentSuccess /> },
+      { path: "order-history", element: <OrderHistory /> },
+      // NotFound riêng cho Client
+      { path: "*", element: <NotFound /> },
     ],
   },
 ];
+
 
 function App() {
   const routes = useRoutes(routesConfig);

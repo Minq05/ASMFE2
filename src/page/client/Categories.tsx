@@ -41,7 +41,6 @@ const CategoriesProduct = () => {
 
   return (
     <div className="p-4">
-      {/* Danh mục */}
       <div className="mb-6 grid justify-center">
         <h3 className="text-5xl font-extrabold mb-4 text-center text-gray-800 dark:text-white">
           Danh mục
@@ -63,7 +62,6 @@ const CategoriesProduct = () => {
         </div>
       </div>
 
-      {/* Sản phẩm */}
       <div>
         <h3 className="text-xl font-semibold mb-2 text-gray-800 dark:text-white">
           Danh sách sản phẩm

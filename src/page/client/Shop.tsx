@@ -46,7 +46,6 @@ function Shop() {
 
     return (
         <div>
-            {/* Sản phẩm mới nhất - Slideshow */}
             <section className="container mx-auto p-6 text-center">
                 <h2 className="text-4xl font-bold mb-4 text-center">Sản phẩm mới nhất</h2>
                 <Swiper
@@ -79,7 +78,6 @@ function Shop() {
                 </Swiper>
             </section>
 
-            {/* Tất cả sản phẩm */}
             <section className="container mx-auto p-6">
                 <h2 className="text-2xl font-bold mb-4">Tất cả sản phẩm</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -104,7 +102,6 @@ function Shop() {
                     ))}
                 </div>
 
-                {/* Nút xem thêm */}
                 {visibleCount < products.length && (
                     <div className="text-center mt-6">
                         <button

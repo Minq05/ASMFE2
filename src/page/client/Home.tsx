@@ -105,7 +105,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Brilliant Home Lighting Ideas */}
       <section className="container mx-auto p-6">
         {randomProduct && (
           <div className="bg-white shadow-lg rounded-lg p-6 flex items-center gap-6 hover:shadow-2xl transition duration-300 cursor-pointer">

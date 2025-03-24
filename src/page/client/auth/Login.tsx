@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../../type/type";
 
-// Type cho response trả về từ API
 type LoginResponse = {
   accessToken: string;
   user: {
@@ -32,7 +31,6 @@ function LoginClient() {
 
       toast.success("Đăng nhập thành công!");
 
-      // Tạo object user lưu vào localStorage
       const userData = {
         id: res.data.user.id,
         name: res.data.user.name,
@@ -40,7 +38,6 @@ function LoginClient() {
         accessToken: res.data.accessToken,
       };
 
-      // Lưu JSON string vào localStorage
       localStorage.setItem("user", JSON.stringify(userData));
 
       nav("/");

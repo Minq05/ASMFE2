@@ -4,7 +4,6 @@ function Contact() {
         className="container mx-auto relative mb-20"
         style={{ marginBottom: 280 }}
       >
-        {/* Bản đồ */}
         <div className="relative w-full h-96">
           <iframe
             className="w-full h-full rounded-lg shadow-lg"
@@ -13,7 +12,6 @@ function Contact() {
             loading="lazy"
           />
         </div>
-        {/* Form liên hệ */}
         <div className="container mx-auto p-6 bg-white rounded-lg shadow-lg mt-6 absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-full md:w-3/4 lg:w-2/3">
           <h2 className="text-3xl font-bold text-center text-gray-800">
             Contact Us

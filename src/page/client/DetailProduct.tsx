@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Product, VolumeOption, Order, CartItem } from "../../type/type";
+import { Product, VolumeOption } from "../../type/type";
 import "react-toastify/dist/ReactToastify.css";
 
 function ProductDetailClient() {
@@ -14,7 +14,6 @@ function ProductDetailClient() {
     const [user, setUser] = useState<{ id: number } | null>(null);
     const nav = useNavigate();
 
-    // Lấy thông tin user từ localStorage
     useEffect(() => {
         try {
             const userData = localStorage.getItem("user");
@@ -24,7 +23,6 @@ function ProductDetailClient() {
         }
     }, []);
 
-    // Lấy dữ liệu sản phẩm
     useEffect(() => {
         if (!id) return;
 
@@ -44,13 +42,32 @@ function ProductDetailClient() {
         fetchProductDetail();
     }, [id]);
 
-    // Xử lý thay đổi dung tích
     const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selected = product?.volume.find((v) => v.type === e.target.value) || null;
         setSelectedVolume(selected);
     };
 
-    // Thêm sản phẩm vào giỏ hàng
+    const handleBuyNow = () => {
+        if (!user) {
+            toast.warning("Vui lòng đăng nhập để mua hàng!");
+            return;
+        }
+
+        if (!product || !selectedVolume) return;
+
+        const newItem = {
+            productId: product.id,
+            productName: product.name,
+            volume: selectedVolume.type,
+            quantity: 1,
+            price: selectedVolume.price,
+            total: selectedVolume.price * 1
+        };
+
+        nav("/payment", { state: { cartItems: [newItem], totalPrice: newItem.total } });
+    };
+
+
     const handleAddToCart = async () => {
         if (!user) {
             toast.warning("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
@@ -74,25 +91,20 @@ function ProductDetailClient() {
             };
 
             if (existingOrder) {
-                // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
                 const existingItemIndex = existingOrder.items.findIndex(
                     (item: any) => item.productId === product.id && item.volume === selectedVolume.type
                 );
 
                 if (existingItemIndex !== -1) {
-                    // Nếu sản phẩm đã tồn tại, cập nhật số lượng và tổng tiền
                     existingOrder.items[existingItemIndex].quantity += 1;
                     existingOrder.items[existingItemIndex].total =
                         existingOrder.items[existingItemIndex].quantity * existingOrder.items[existingItemIndex].price;
                 } else {
-                    // Nếu chưa có, thêm sản phẩm mới vào giỏ hàng
                     existingOrder.items.push(newItem);
                 }
 
-                // Cập nhật giỏ hàng trên server
                 await axios.put(`http://localhost:8000/orders/${existingOrder.id}`, existingOrder);
             } else {
-                // Nếu chưa có đơn hàng, tạo đơn hàng mới
                 const newOrder = {
                     userId: user.id,
                     items: [newItem]
@@ -115,19 +127,16 @@ function ProductDetailClient() {
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
             <div className="grid md:grid-cols-2 gap-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                {/* Hình ảnh sản phẩm */}
                 <div>
                     <img src={product?.image} alt={product?.name} className="w-full rounded-lg shadow" />
                 </div>
 
-                {/* Thông tin sản phẩm */}
                 <div>
                     <h2 className="text-3xl font-bold text-orange-600 mb-2">{product?.name}</h2>
                     <p className="text-sm text-gray-700 dark:text-gray-300">Thương hiệu: <strong>{product?.brand}</strong></p>
                     <p className="text-sm text-gray-700 dark:text-gray-300">Danh mục: <strong>{product?.category}</strong></p>
                     <p className="text-sm text-gray-700 dark:text-gray-300">Tồn kho: <strong>{product?.stock}</strong></p>
 
-                    {/* Chọn dung tích */}
                     <div className="my-4">
                         <h4 className="text-lg font-semibold text-orange-500 mb-2">Chọn dung tích:</h4>
                         <div className="space-y-2">
@@ -149,13 +158,11 @@ function ProductDetailClient() {
                         </div>
                     </div>
 
-                    {/* Mô tả sản phẩm */}
                     <div className="my-4">
                         <h4 className="text-lg font-semibold text-orange-500 mb-2">Mô tả sản phẩm:</h4>
                         <p className="text-gray-700 dark:text-gray-200">{product?.description}</p>
                     </div>
 
-                    {/* Nút Thêm vào giỏ hàng và Mua ngay */}
                     <div className="flex space-x-3 mt-6">
                         <button
                             onClick={handleAddToCart}
@@ -163,7 +170,10 @@ function ProductDetailClient() {
                         >
                             Thêm vào giỏ hàng
                         </button>
-                        <button className="bg-white border cursor-pointer border-orange-500 text-orange-600 px-6 py-2 rounded hover:bg-orange-100">
+                        <button
+                            onClick={handleBuyNow}
+                            className="bg-white border cursor-pointer border-orange-500 text-orange-600 px-6 py-2 rounded hover:bg-orange-100"
+                        >
                             Mua ngay
                         </button>
                     </div>

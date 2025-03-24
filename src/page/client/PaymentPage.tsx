@@ -51,8 +51,6 @@ function PaymentPage() {
             };
             await axios.post("http://localhost:8000/orders", newOrder);
 
-            // Reset giỏ hàng
-            localStorage.removeItem("cart"); // Nếu giỏ hàng lưu trong localStorage
             navigate("/payment-success", { state: { totalPrice, cartItems } });
             toast.success("Đơn hàng đã được tạo thành công!");
         } catch (error) {
