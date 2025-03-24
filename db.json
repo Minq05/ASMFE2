@@ -875,16 +875,7 @@
   "orders": [
     {
       "userId": "xCJnSDK",
-      "items": [
-        {
-          "productId": "b038",
-          "productName": "Dior Homme Intense",
-          "volume": "100ml",
-          "quantity": 1,
-          "price": 250000,
-          "total": 250000
-        }
-      ],
+      "items": [],
       "totalPrice": 250000,
       "paymentMethod": "Credit Card",
       "bank": "vietcombank",

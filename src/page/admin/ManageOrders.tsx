@@ -34,12 +34,12 @@ const ManageOrders = () => {
     }
   };
 
-  const getUserName = (userId) => {
+  const getUserName = (userId:any) => {
     const user = users.find((u) => u.id === userId);
     return user ? user.fullname : "Không xác định";
   };
 
-  const handleStatusChange = async (orderId, newStatus) => {
+  const handleStatusChange = async (orderId:any, newStatus:any) => {
     try {
       await axios.patch(`http://localhost:8000/orders/${orderId}`, { status: newStatus });
       setOrders(orders.map(order => order.id === orderId ? { ...order, status: newStatus } : order));
@@ -50,7 +50,7 @@ const ManageOrders = () => {
     }
   };
 
-  const handleDeleteOrder = async (orderId) => {
+  const handleDeleteOrder = async (orderId:any) => {
     if (!window.confirm("Bạn có chắc chắn muốn xóa đơn hàng này?")) return;
 
     try {
@@ -70,14 +70,14 @@ const ManageOrders = () => {
       title: "Tổng tiền",
       dataIndex: "totalPrice",
       key: "totalPrice",
-      render: (price) => (typeof price === "number" ? `${price.toLocaleString()} VND` : "0 VND"),
+      render: (price: any) => (typeof price === "number" ? `${price.toLocaleString()} VND` : "0 VND"),
     },
     { title: "Phương thức thanh toán", dataIndex: "paymentMethod", key: "paymentMethod" },
     {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status, record) => (
+      render: (status: any, record: any) => (
         <Select defaultValue={status} onChange={newStatus => handleStatusChange(record.id, newStatus)}>
           <Option value="Đang xử lý">Đang xử lý</Option>
           <Option value="Thanh toán thành công">Thanh toán thành công</Option>
@@ -90,7 +90,7 @@ const ManageOrders = () => {
     {
       title: "Hành động",
       key: "actions",
-      render: (_, record) => (
+      render: (_:any, record:any) => (
         <Button danger onClick={() => handleDeleteOrder(record.id)}>
           Xóa đơn hàng
         </Button>

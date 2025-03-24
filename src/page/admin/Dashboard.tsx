@@ -17,7 +17,7 @@ import {
 } from "@ant-design/icons";
 import { motion } from "framer-motion";
 import API from "../../services/api";
-import { Order, Product, User } from "../../type/type";
+import { Order, Product } from "../../type/type";
 
 const { Title } = Typography;
 
@@ -39,30 +39,30 @@ function Dashboard() {
 
         setTotalProducts(resProducts.data.length);
         setTotalOrders(resOrders.data.length);
-        
+
         // Lấy số lượng tài khoản có role là "staff"
         const staffUsers = resUsers.data.filter(user => user.role === "staff").length;
         setTotalCustomers(staffUsers);
 
         const revenue = resOrders.data.reduce(
-          (sum, order) => sum + (order.totalPrice || 0),
+          (sum: any, order: any) => sum + (order.totalPrice || 0),
           0
         );
         setTotalRevenue(revenue);
 
         const delivered = resOrders.data.filter(
-          (o) => o.status === "Đã giao"
+          (o: any) => o.status === "Đã giao"
         ).length;
         const processing = resOrders.data.filter(
-          (o) => o.status === "Đang xử lý"
+          (o: any) => o.status === "Đang xử lý"
         ).length;
 
         setDeliveredCount(delivered);
         setProcessingCount(processing);
 
         const grouped = {};
-        resOrders.data.forEach((order) => {
-          order.items.forEach((item) => {
+        resOrders.data.forEach((order: any) => {
+          order.items.forEach((item: any) => {
             const product = item.productName || "Sản phẩm khác";
             const revenue = item.total;
             grouped[product] = (grouped[product] || 0) + revenue;
