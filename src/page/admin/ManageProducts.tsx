@@ -2,9 +2,9 @@
 import { Table, Button, Space, message, Image } from "antd";
 import { useEffect, useState } from "react";
 import { Product } from "../../type/type";
-import axios from "axios";
 import { useNavigate } from "react-router";
 import { motion } from "framer-motion";
+import API from "../../services/api";
 
 function ManageProducts() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -12,7 +12,7 @@ function ManageProducts() {
 
   const fetchProduct = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/products");
+      const { data } = await API.get("products");
       setProducts(data);
     } catch (error) {
       console.error("Lỗi lấy sản phẩm:", error);
@@ -34,9 +34,9 @@ function ManageProducts() {
   const handleDelete = async (id: string) => {
     if (confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
       try {
-        await axios.delete(`http://localhost:8000/products/${id}`);
+        await API.delete(`products/${id}`);
         message.success("Đã xoá sản phẩm thành công!");
-        fetchProduct(); 
+        fetchProduct();
       } catch (error) {
         console.error("Lỗi xoá sản phẩm:", error);
         message.error("Xoá sản phẩm thất bại!");

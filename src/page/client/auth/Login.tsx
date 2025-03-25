@@ -1,9 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { User } from "../../../type/type";
+import API from "../../../services/api";
 
 type LoginResponse = {
   accessToken: string;
@@ -24,8 +24,8 @@ function LoginClient() {
 
   const onSubmitForm: SubmitHandler<User> = async (data) => {
     try {
-      const res = await axios.post<LoginResponse>(
-        "http://localhost:8000/login",
+      const res = await API.post<LoginResponse>(
+        "login",
         data
       );
 

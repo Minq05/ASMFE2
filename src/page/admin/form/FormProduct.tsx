@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Card, message, Select, Spin } from "antd";
 import type { FormProps } from "antd";
-import axios from "axios";
 import { Category, Product } from "../../../type/type";
 import { useNavigate, useParams } from "react-router";
+import API from "../../../services/api";
 
 const { Option } = Select;
 
@@ -18,7 +18,7 @@ const FormProduct: React.FC = () => {
   // Lấy danh sách danh mục
   const fetchCategories = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/categories");
+      const { data } = await API.get("categories");
       setCategories(data);
       setLoadingSelect(false);
     } catch (error) {
@@ -29,7 +29,7 @@ const FormProduct: React.FC = () => {
   // Lấy dữ liệu sản phẩm nếu có id
   const fetchProductId = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/products/${id}`);
+      const { data } = await API.get(`products/${id}`);
       const fixedData = {
         ...data,
         category:
@@ -68,10 +68,10 @@ const FormProduct: React.FC = () => {
 
     try {
       if (id) {
-        await axios.put(`http://localhost:8000/products/${id}`, newProduct);
+        await API.put(`products/${id}`, newProduct);
         message.success("✔️ Cập nhật sản phẩm thành công!");
       } else {
-        await axios.post("http://localhost:8000/products", newProduct);
+        await API.post("products", newProduct);
         message.success("✔️ Thêm sản phẩm thành công!");
       }
       form.resetFields();

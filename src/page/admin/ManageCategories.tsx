@@ -3,15 +3,15 @@ import { Button, Space, Table } from "antd";
 import type { TableProps } from "antd";
 import { Category } from "../../type/type";
 import { useNavigate } from "react-router";
-import axios from "axios";
 import { motion } from "framer-motion";
+import API from "../../services/api";
 function ManageCategories() {
   const [categories, setCategories] = useState<Category[]>([]);
   const nav = useNavigate();
 
   const fetchCategories = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/categories");
+      const { data } = await API.get("categories");
       setCategories(data);
     } catch (error) {
       console.error("Lỗi lấy danh mục:", error);
@@ -21,7 +21,7 @@ function ManageCategories() {
   const handleDelete = async (id: string) => {
     if (confirm("Bạn có chắc chắn muốn xoá danh mục này?")) {
       try {
-        await axios.delete(`http://localhost:8000/categories/${id}`);
+        await API.delete(`categories/${id}`);
         fetchCategories();
       } catch (error) {
         console.error("Lỗi xoá danh mục:", error);

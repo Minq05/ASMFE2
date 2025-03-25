@@ -1,9 +1,9 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router";
 import { User } from "../../../type/type";
+import API from "../../../services/api";
 
 function Register() {
   const nav = useNavigate();
@@ -16,7 +16,7 @@ function Register() {
 
   const onSubmitForm: SubmitHandler<User> = async (data) => {
     try {
-      await axios.post("http://localhost:8000/users", { ...data, role: "staff" });
+      await API.post("users", { ...data, role: "staff" });
       toast.success("Đăng ký thành công!");
       nav("/login-client");
     } catch (error) {

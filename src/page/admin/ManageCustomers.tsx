@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Table, Input, Button, message, Typography } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { Link } from "react-router-dom";
-import { Customer, User } from "../../type/type";
+import { User } from "../../type/type";
 import { motion } from "framer-motion";
+import API from "../../services/api";
 
 const { Title } = Typography;
 const { Search } = Input;
+
+export type Customer = {
+  fullname: string,
+  address: string,
+  email: string,
+  phone: string
+}
 
 function ManageCustomers() {
   const [customers, setCustomers] = useState<User[]>([]);
@@ -21,7 +28,7 @@ function ManageCustomers() {
 
   const fetchCustomers = async () => {
     try {
-      const res = await axios.get<User[]>("http://localhost:8000/users");
+      const res = await API.get<User[]>("users");
       const staffUsers = res.data.filter((user) => user.role === "staff");
       setCustomers(staffUsers);
       setFilteredCustomers(staffUsers);
@@ -37,7 +44,7 @@ function ManageCustomers() {
   const handleDelete = async (id: string) => {
     if (confirm("Xác nhận xóa khách hàng?")) {
       try {
-        await axios.delete(`http://localhost:8000/customers/${id}`);
+        await API.delete(`users/${id}`);
         fetchCustomers();
         message.success("Xóa khách hàng thành công!");
       } catch (err) {

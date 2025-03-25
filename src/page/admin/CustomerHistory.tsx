@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { Table } from "antd";
 import { Order, Product } from "../../type/type";
 import { motion } from "framer-motion";
+import API from "../../services/api";
 
 function CustomerHistory() {
   const { customerName } = useParams<{ customerName: string }>();
@@ -18,7 +18,7 @@ function CustomerHistory() {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get<Order[]>("http://localhost:3000/orders");
+      const res = await API.get<Order[]>("orders");
       const customerOrders = res.data.filter(
         (order) => order.customerName === customerName
       );
@@ -32,7 +32,7 @@ function CustomerHistory() {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get<Product[]>("http://localhost:3000/products");
+      const res = await API.get<Product[]>("products");
       setProducts(res.data);
     } catch (error) {
       console.error("Lỗi khi tải sản phẩm:", error);

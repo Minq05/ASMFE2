@@ -1042,16 +1042,6 @@
       "confirmPassword": "123123",
       "role": "staff",
       "id": "DxZzMhG"
-    },
-    {
-      "email": "ronaldo@gmail.com",
-      "password": "$2a$10$0WeHfQDKiKR.odfepL77quXyiB4o9yfnj8l/y8rKKzZUhL3bhMYr.",
-      "fullname": "Ronaldo ",
-      "phone": "0364017978",
-      "address": "Bồ Đào Nha",
-      "confirmPassword": "123123",
-      "role": "staff",
-      "id": "xCJnSDK"
     }
   ],
   "categories": [

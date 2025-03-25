@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Table, Select, message, Button } from "antd";
-import axios from "axios";
 import { Order, User } from "../../type/type";
+import API from "../../services/api";
 
 const { Option } = Select;
 
@@ -16,7 +16,7 @@ const ManageOrders = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/orders");
+      const res = await API.get("orders");
       setOrders(res.data);
     } catch (error) {
       console.log(error);
@@ -26,7 +26,7 @@ const ManageOrders = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/users");
+      const res = await API.get("users");
       setUsers(res.data);
     } catch (error) {
       console.log(error);
@@ -41,7 +41,7 @@ const ManageOrders = () => {
 
   const handleStatusChange = async (orderId:any, newStatus:any) => {
     try {
-      await axios.patch(`http://localhost:8000/orders/${orderId}`, { status: newStatus });
+      await API.patch(`orders/${orderId}`, { status: newStatus });
       setOrders(orders.map(order => order.id === orderId ? { ...order, status: newStatus } : order));
       message.success("Cập nhật trạng thái thành công");
     } catch (error) {
@@ -52,9 +52,8 @@ const ManageOrders = () => {
 
   const handleDeleteOrder = async (orderId:any) => {
     if (!window.confirm("Bạn có chắc chắn muốn xóa đơn hàng này?")) return;
-
     try {
-      await axios.delete(`http://localhost:8000/orders/${orderId}`);
+      await API.delete(`orders/${orderId}`);
       setOrders(orders.filter(order => order.id !== orderId));
       message.success("Xóa đơn hàng thành công!");
     } catch (error) {

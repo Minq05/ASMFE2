@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion"
+import API from "../../services/api";
 
 function OrderHistory() {
     const [orders, setOrders] = useState([]);
@@ -21,7 +21,7 @@ function OrderHistory() {
             if (!user) return;
 
             try {
-                const res = await axios.get(`http://localhost:8000/orders?userId=${user.id}`);
+                const res = await API.get(`orders?userId=${user.id}`);
                 setOrders(res.data);
             } catch (error) {
                 console.error("Lỗi lấy lịch sử đơn hàng:", error);

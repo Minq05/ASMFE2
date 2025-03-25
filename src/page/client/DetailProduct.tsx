@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { Product, VolumeOption } from "../../type/type";
 import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion"
+import API from "../../services/api";
 
 function ProductDetailClient() {
     const { id } = useParams();
@@ -29,7 +29,7 @@ function ProductDetailClient() {
 
         const fetchProductDetail = async () => {
             try {
-                const { data } = await axios.get<Product>(`http://localhost:8000/products/${id}`);
+                const { data } = await API.get<Product>(`products/${id}`);
                 setProduct(data);
                 if (data.volume?.length > 0) setSelectedVolume(data.volume[0]);
             } catch (err) {
@@ -78,7 +78,7 @@ function ProductDetailClient() {
         if (!product || !selectedVolume) return;
 
         try {
-            const res = await axios.get(`http://localhost:8000/orders?userId=${user.id}`);
+            const res = await API.get(`orders?userId=${user.id}`);
             const orders = Array.isArray(res.data) ? res.data : [];
             let existingOrder = orders[0];
 
@@ -104,13 +104,13 @@ function ProductDetailClient() {
                     existingOrder.items.push(newItem);
                 }
 
-                await axios.put(`http://localhost:8000/orders/${existingOrder.id}`, existingOrder);
+                await API.put(`orders/${existingOrder.id}`, existingOrder);
             } else {
                 const newOrder = {
                     userId: user.id,
                     items: [newItem]
                 };
-                await axios.post(`http://localhost:8000/orders`, newOrder);
+                await API.post(`orders`, newOrder);
             }
 
             toast.success("Đã thêm vào giỏ hàng!");

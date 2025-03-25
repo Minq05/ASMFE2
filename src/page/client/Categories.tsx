@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { Product } from "../../type/type";
 import { motion } from "framer-motion"
+import API from "../../services/api";
 
 const CategoriesProduct = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -21,7 +21,7 @@ const CategoriesProduct = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/products");
+      const res = await API.get("products");
       setProducts(res.data);
     } catch (err) {
       console.error("Lỗi khi tải sản phẩm:", err);

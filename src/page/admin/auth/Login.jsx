@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import API from "../../../services/api";
 
 function LoginAdmin() {
   const [username, setUsername] = useState("");
@@ -11,7 +11,7 @@ function LoginAdmin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.get("http://localhost:8000/users");
+      const res = await API.get("users");
       const user = res.data.find(
         (u) => u.username === username && u.password === password
       );

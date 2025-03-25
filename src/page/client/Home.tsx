@@ -1,9 +1,9 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { Category, Product } from "../../type/type";
 import { motion } from "framer-motion"
+import API from "../../services/api";
 
 function Home() {
   const [products, setProduct] = useState<Product[]>([]);
@@ -14,7 +14,7 @@ function Home() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/products");
+      const { data } = await API.get("products");
       setProduct(data);
     } catch (error) {
       console.log(error);
@@ -24,7 +24,7 @@ function Home() {
 
   const fetchCategories = async () => {
     try {
-      const { data } = await axios.get("http://localhost:8000/categories");
+      const { data } = await API.get("categories");
       setCategories(data);
     } catch (error) {
       console.log(error);

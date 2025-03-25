@@ -1,10 +1,10 @@
 // pages/admin/ManageOrderDetail.tsx
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { Descriptions, Typography, Spin, Alert, Tag, Card } from "antd";
 import { Order } from "../../type/type";
 import { motion } from "framer-motion";
+import API from "../../services/api";
 
 const { Title } = Typography;
 
@@ -19,7 +19,7 @@ function ManageOrderDetail() {
 
   const fetchOrderDetail = async () => {
     try {
-      const res = await axios.get<Order>(`http://localhost:8000/orders/${id}`);
+      const res = await API.get<Order>(`orders/${id}`);
       setOrder(res.data);
     } catch (error) {
       console.error("Lỗi khi tải đơn hàng:", error);

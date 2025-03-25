@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { CartItem } from "../../type/type";
+import API from "../../services/api";
 function Cart() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [user, setUser] = useState(null);
@@ -20,7 +20,7 @@ function Cart() {
       if (!user) return;
 
       try {
-        const res = await axios.get(`http://localhost:8000/orders?userId=${user.id}`);
+        const res = await API.get(`orders?userId=${user.id}`);
         if (res.data.length > 0) {
           setCartItems(res.data[0].items);
         } else {
@@ -37,16 +37,16 @@ function Cart() {
 
   const updateCart = async (updatedItems: any) => {
     if (!user) {
-      await axios.put(`http://localhost:8000/orders/${user.id}`, { items: [] });
+      await API.put(`orders/${user.id}`, { items: [] });
       setCartItems([]);
     }
 
     try {
-      const res = await axios.get(`http://localhost:8000/orders?userId=${user.id}`);
+      const res = await API.get(`orders?userId=${user.id}`);
       if (res.data.length > 0) {
         const order = res.data[0];
         order.items = updatedItems;
-        await axios.put(`http://localhost:8000/orders/${order.id}`, order);
+        await API.put(`orders/${order.id}`, order);
         setCartItems(updatedItems);
       }
     } catch (error) {

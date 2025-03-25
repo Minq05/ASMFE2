@@ -2,9 +2,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Product } from "../../type/type";
-import axios from "axios";
 import { Button, Card, Descriptions, Image } from "antd";
 import { motion } from "framer-motion";
+import API from "../../services/api";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -13,7 +13,7 @@ function ProductDetail() {
 
   const fetchProductDetail = async () => {
     try {
-      const { data } = await axios.get(`http://localhost:8000/products/${id}`);
+      const { data } = await API.get(`products/${id}`);
       setProduct(data);
     } catch (error) {
       console.error("Lỗi lấy chi tiết sản phẩm:", error);

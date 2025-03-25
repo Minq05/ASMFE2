@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion"
+import API from "../../services/api";
 
 interface Product {
     id: number;
@@ -20,7 +20,7 @@ function Shop() {
 
     const fetchProducts = async () => {
         try {
-            const { data } = await axios.get("http://localhost:8000/products");
+            const { data } = await API.get("products");
             setProducts(data);
         } catch (error) {
             console.error(error);
