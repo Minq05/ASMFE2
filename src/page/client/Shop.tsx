@@ -4,6 +4,7 @@ import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion"
 
 interface Product {
     id: number;
@@ -45,75 +46,80 @@ function Shop() {
     }, [products]);
 
     return (
-        <div>
-            <section className="container mx-auto p-6 text-center">
-                <h2 className="text-4xl font-bold mb-4 text-center">Sản phẩm mới nhất</h2>
-                <Swiper
-                    modules={[Navigation, Autoplay]}
-                    spaceBetween={30}
-                    slidesPerView={4}
-                    navigation
-                    autoplay={{ delay: 2000 }}
-                    loop={true}
-                    breakpoints={{
-                        640: { slidesPerView: 1 },
-                        768: { slidesPerView: 2 },
-                        1024: { slidesPerView: 3 },
-                    }}
-                >
-                    {newestProducts.map((product) => (
-                        <SwiperSlide key={product.id}>
-                            <Link to={`/shop/${product.id}`}>
-                                <div className="text-center p-4">
-                                    <img
-                                        src={product.image}
-                                        alt={product.name}
-                                        className="rounded-full h-56 w-46 mx-auto transition transform hover:scale-105 hover:shadow-lg cursor-pointer"
-                                    />
-                                    <p className="mt-2 font-semibold">{product.name}</p>
-                                </div>
-                            </Link>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-            </section>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+        >
+            <div>
+                <section className="container mx-auto p-6 text-center">
+                    <h2 className="text-4xl font-bold mb-4 text-center">Sản phẩm mới nhất</h2>
+                    <Swiper
+                        modules={[Navigation, Autoplay]}
+                        spaceBetween={30}
+                        slidesPerView={4}
+                        navigation
+                        autoplay={{ delay: 2000 }}
+                        loop={true}
+                        breakpoints={{
+                            640: { slidesPerView: 1 },
+                            768: { slidesPerView: 2 },
+                            1024: { slidesPerView: 3 },
+                        }}
+                    >
+                        {newestProducts.map((product) => (
+                            <SwiperSlide key={product.id}>
+                                <Link to={`/shop/${product.id}`}>
+                                    <div className="text-center p-4">
+                                        <img
+                                            src={product.image}
+                                            alt={product.name}
+                                            className="rounded-full h-56 w-46 mx-auto transition transform hover:scale-105 hover:shadow-lg cursor-pointer"
+                                        />
+                                        <p className="mt-2 font-semibold">{product.name}</p>
+                                    </div>
+                                </Link>
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                </section>
 
-            <section className="container mx-auto p-6">
-                <h2 className="text-2xl font-bold mb-4">Tất cả sản phẩm</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    {products.slice(0, visibleCount).map((product) => (
-                        <div
-                            key={product.id}
-                            className="bg-white h-96 w-full p-4 grid justify-center shadow rounded hover:shadow-lg transition duration-300 transform hover:scale-105 cursor-pointer"
-                        >
-                            <img
-                                src={product.image}
-                                alt={product.name}
-                                className="w-72 h-56 object-cover"
-                            />
-                            <p className="mt-2 font-semibold">{product.name}</p>
-                            <p className="text-gray-700">Nhãn: {product.brand}</p>
-                            <Link to={`/shop/${product.id}`}>
-                                <button className="text-orange-500 font-semibold cursor-pointer hover:bg-orange-500 hover:text-white hover:shadow-2xl transition duration-300 border border-orange-500 rounded-lg px-4 py-2 w-full mt-2">
-                                    Mua ngay
-                                </button>
-                            </Link>
-                        </div>
-                    ))}
-                </div>
-
-                {visibleCount < products.length && (
-                    <div className="text-center mt-6">
-                        <button
-                            onClick={handleShowMore}
-                            className="text-orange-500 font-semibold hover:bg-orange-500 cursor-pointer hover:text-white hover:shadow-2xl transition duration-300 border border-orange-500 rounded-lg px-4 py-2"
-                        >
-                            Xem thêm
-                        </button>
+                <section className="container mx-auto p-6">
+                    <h2 className="text-2xl font-bold mb-4">Tất cả sản phẩm</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        {products.slice(0, visibleCount).map((product) => (
+                            <div
+                                key={product.id}
+                                className="bg-white h-96 w-full p-4 grid justify-center shadow rounded hover:shadow-lg transition duration-300 transform hover:scale-105 cursor-pointer"
+                            >
+                                <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="w-72 h-56 object-cover"
+                                />
+                                <p className="mt-2 font-semibold">{product.name}</p>
+                                <p className="text-gray-700">Nhãn: {product.brand}</p>
+                                <Link to={`/shop/${product.id}`}>
+                                    <button className="text-orange-500 font-semibold cursor-pointer hover:bg-orange-500 hover:text-white hover:shadow-2xl transition duration-300 border border-orange-500 rounded-lg px-4 py-2 w-full mt-2">
+                                        Mua ngay
+                                    </button>
+                                </Link>
+                            </div>
+                        ))}
                     </div>
-                )}
-            </section>
-        </div>
+
+                    {visibleCount < products.length && (
+                        <div className="text-center mt-6">
+                            <button
+                                onClick={handleShowMore}
+                                className="text-orange-500 font-semibold hover:bg-orange-500 cursor-pointer hover:text-white hover:shadow-2xl transition duration-300 border border-orange-500 rounded-lg px-4 py-2"
+                            >
+                                Xem thêm
+                            </button>
+                        </div>
+                    )}
+                </section>
+            </div></motion.div>
     );
 }
 

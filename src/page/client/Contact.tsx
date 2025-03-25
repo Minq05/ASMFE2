@@ -1,5 +1,11 @@
+import { motion } from "framer-motion"
 function Contact() {
-    return (
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4 }}
+    >
       <div
         className="container mx-auto relative mb-20"
         style={{ marginBottom: 280 }}
@@ -65,8 +71,7 @@ function Contact() {
             </button>
           </form>
         </div>
-      </div>
-    );
-  }
-  export default Contact;
-  
+      </div></motion.div>
+  );
+}
+export default Contact;

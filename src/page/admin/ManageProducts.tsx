@@ -36,7 +36,7 @@ function ManageProducts() {
       try {
         await axios.delete(`http://localhost:8000/products/${id}`);
         message.success("Đã xoá sản phẩm thành công!");
-        fetchProduct(); // Cập nhật lại danh sách
+        fetchProduct(); 
       } catch (error) {
         console.error("Lỗi xoá sản phẩm:", error);
         message.error("Xoá sản phẩm thất bại!");

@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import API from "../../services/api";
 
 const banks = [
     { id: "vietcombank", name: "Vietcombank", logo: "https://www.bing.com/th?id=OIP.FCOsyWba4BiGoSt5jPl1dgHaFj&w=254&h=211&c=8&rs=1&qlt=90&o=6&dpr=1.3&pid=3.1&rm=2" },
@@ -46,13 +46,35 @@ function PaymentPage() {
                 totalPrice,
                 paymentMethod: selectedPayment === "credit_card" ? "Credit Card" : "COD",
                 bank: selectedPayment === "credit_card" ? selectedBank : null,
-                status: selectedPayment === "credit_card" ? "Thanh toán thành công" : "Đang xử lý",
+                status: selectedPayment === "credit_card" ? "Thanh toán thành công" : "Chờ xác nhận", // COD sẽ ở trạng thái "Chờ xác nhận"
                 createdAt: new Date().toISOString(),
             };
-            await axios.post("http://localhost:8000/orders", newOrder);
 
-            navigate("/payment-success", { state: { totalPrice, cartItems } });
-            toast.success("Đơn hàng đã được tạo thành công!");
+            await API.post("orders", newOrder);
+
+            if (selectedPayment === "credit_card") {
+                await Promise.all(
+                    cartItems.map(async (item: any) => {
+                        const productRes = await API.get(`products/${item.productId}`);
+                        const updatedStock = Number(productRes.data.stock) - Number(item.quantity);
+
+                        if (updatedStock < 0) {
+                            toast.error(`Sản phẩm ${item.productName} đã hết hàng!`);
+                            return;
+                        }
+
+                        await API.patch(`products/${item.productId}`, { stock: updatedStock });
+                    })
+                );
+            }
+
+            navigate("/payment-success", {
+                state: {
+                    totalPrice,
+                    paymentMethod: selectedPayment === "credit_card" ? "Credit Card" : "COD"
+                }
+            });
+
         } catch (error) {
             console.error("Lỗi khi thanh toán:", error);
             toast.error("Thanh toán thất bại, vui lòng thử lại!");
@@ -63,7 +85,9 @@ function PaymentPage() {
     return (
         <div className="container mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
             <h2 className="text-2xl font-bold mb-6">Chọn Phương Thức Thanh Toán</h2>
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">Tổng tiền: {totalPrice.toLocaleString()} VND</h3>
+            <h3 className="text-xl font-semibold text-gray-700 mb-4">
+                Tổng tiền: {Number(totalPrice).toLocaleString()} VND
+            </h3>
 
             <div className="mb-6">
                 <label className="block mb-2">
@@ -81,25 +105,38 @@ function PaymentPage() {
                     <h3 className="text-xl font-bold mb-4">Chọn Ngân Hàng</h3>
                     <div className="grid grid-cols-3 gap-4">
                         {banks.map((bank) => (
-                            <div key={bank.id} className={`p-4 border rounded-lg cursor-pointer ${selectedBank === bank.id ? "border-blue-500" : ""}`}
+                            <div key={bank.id}
+                                className={`p-4 border rounded-lg cursor-pointer ${selectedBank === bank.id ? "border-blue-500" : ""}`}
                                 onClick={() => setSelectedBank(bank.id)}>
                                 <img src={bank.logo} alt={bank.name} className="w-full h-16 object-contain" />
                             </div>
                         ))}
                     </div>
 
-                    <div className="mt-6 p-4 border rounded-lg">
-                        <h3 className="text-xl font-bold mb-4">Nhập Thông Tin Thẻ</h3>
-                        <input type="text" name="name" placeholder="Tên chủ thẻ" className="block w-full p-2 mb-2 border" onChange={(e) => setCardInfo({ ...cardInfo, name: e.target.value })} />
-                        <input type="text" name="number" placeholder="Số thẻ" className="block w-full p-2 mb-2 border" onChange={(e) => setCardInfo({ ...cardInfo, number: e.target.value })} />
-                        <div className="flex gap-2">
-                            <input type="text" name="expiry" placeholder="MM/YY" className="w-1/2 p-2 border" onChange={(e) => setCardInfo({ ...cardInfo, expiry: e.target.value })} />
-                            <input type="text" name="cvv" placeholder="CVV" className="w-1/2 p-2 border" onChange={(e) => setCardInfo({ ...cardInfo, cvv: e.target.value })} />
+                    {selectedBank && (
+                        <div className="mt-6 p-4 border rounded-lg">
+                            <h3 className="text-xl font-bold mb-4">Nhập Thông Tin Thẻ</h3>
+                            <input type="text" name="name" placeholder="Tên chủ thẻ" className="block w-full p-2 mb-2 border"
+                                onChange={(e) => setCardInfo({ ...cardInfo, name: e.target.value })} />
+
+                            <input type="text" name="number" placeholder="Số thẻ" className="block w-full p-2 mb-2 border"
+                                onChange={(e) => setCardInfo({ ...cardInfo, number: e.target.value })} />
+
+                            <div className="flex gap-2">
+                                <input type="text" name="expiry" placeholder="MM/YY" className="w-1/2 p-2 border"
+                                    onChange={(e) => setCardInfo({ ...cardInfo, expiry: e.target.value })} />
+
+                                <input type="text" name="cvv" placeholder="CVV" className="w-1/2 p-2 border"
+                                    onChange={(e) => setCardInfo({ ...cardInfo, cvv: e.target.value })} />
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </>
             )}
-            <button onClick={handlePayment} className="mt-4 cursor-pointer bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition">Xác nhận thanh toán</button>
+
+            <button onClick={handlePayment} className="mt-4 cursor-pointer bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition">
+                Xác nhận thanh toán
+            </button>
             <ToastContainer />
         </div>
     );

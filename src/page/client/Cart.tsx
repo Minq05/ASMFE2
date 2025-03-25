@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { CartItem } from "../../type/type";
-
 function Cart() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [user, setUser] = useState(null);

@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Product, VolumeOption } from "../../type/type";
 import "react-toastify/dist/ReactToastify.css";
+import { motion } from "framer-motion"
 
 function ProductDetailClient() {
     const { id } = useParams();
@@ -125,61 +126,66 @@ function ProductDetailClient() {
     if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
 
     return (
-        <div className="max-w-6xl mx-auto px-4 py-8">
-            <div className="grid md:grid-cols-2 gap-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-                <div>
-                    <img src={product?.image} alt={product?.name} className="w-full rounded-lg shadow" />
-                </div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+        >
+            <div className="max-w-6xl mx-auto px-4 py-8">
+                <div className="grid md:grid-cols-2 gap-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                    <div>
+                        <img src={product?.image} alt={product?.name} className="w-full rounded-lg shadow" />
+                    </div>
 
-                <div>
-                    <h2 className="text-3xl font-bold text-orange-600 mb-2">{product?.name}</h2>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">Thương hiệu: <strong>{product?.brand}</strong></p>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">Danh mục: <strong>{product?.category}</strong></p>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">Tồn kho: <strong>{product?.stock}</strong></p>
+                    <div>
+                        <h2 className="text-3xl font-bold text-orange-600 mb-2">{product?.name}</h2>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">Thương hiệu: <strong>{product?.brand}</strong></p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">Danh mục: <strong>{product?.category}</strong></p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">Tồn kho: <strong>{product?.stock}</strong></p>
 
-                    <div className="my-4">
-                        <h4 className="text-lg font-semibold text-orange-500 mb-2">Chọn dung tích:</h4>
-                        <div className="space-y-2">
-                            {product?.volume?.map((vol, index) => (
-                                <label key={index} className="flex items-center space-x-2 text-gray-800 dark:text-gray-200">
-                                    <input
-                                        type="radio"
-                                        name="volume"
-                                        value={vol.type}
-                                        checked={selectedVolume?.type === vol.type}
-                                        onChange={handleVolumeChange}
-                                        className="text-orange-500 focus:ring-orange-400"
-                                    />
-                                    <span>
-                                        {vol.type} – <span className="font-semibold text-orange-600">{vol.price.toLocaleString()}đ</span>
-                                    </span>
-                                </label>
-                            ))}
+                        <div className="my-4">
+                            <h4 className="text-lg font-semibold text-orange-500 mb-2">Chọn dung tích:</h4>
+                            <div className="space-y-2">
+                                {product?.volume?.map((vol, index) => (
+                                    <label key={index} className="flex items-center space-x-2 text-gray-800 dark:text-gray-200">
+                                        <input
+                                            type="radio"
+                                            name="volume"
+                                            value={vol.type}
+                                            checked={selectedVolume?.type === vol.type}
+                                            onChange={handleVolumeChange}
+                                            className="text-orange-500 focus:ring-orange-400"
+                                        />
+                                        <span>
+                                            {vol.type} – <span className="font-semibold text-orange-600">{vol.price.toLocaleString()}đ</span>
+                                        </span>
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="my-4">
+                            <h4 className="text-lg font-semibold text-orange-500 mb-2">Mô tả sản phẩm:</h4>
+                            <p className="text-gray-700 dark:text-gray-200">{product?.description}</p>
+                        </div>
+
+                        <div className="flex space-x-3 mt-6">
+                            <button
+                                onClick={handleAddToCart}
+                                className="bg-orange-500 hover:bg-orange-600 cursor-pointer text-white px-6 py-2 rounded shadow"
+                            >
+                                Thêm vào giỏ hàng
+                            </button>
+                            <button
+                                onClick={handleBuyNow}
+                                className="bg-white border cursor-pointer border-orange-500 text-orange-600 px-6 py-2 rounded hover:bg-orange-100"
+                            >
+                                Mua ngay
+                            </button>
                         </div>
                     </div>
-
-                    <div className="my-4">
-                        <h4 className="text-lg font-semibold text-orange-500 mb-2">Mô tả sản phẩm:</h4>
-                        <p className="text-gray-700 dark:text-gray-200">{product?.description}</p>
-                    </div>
-
-                    <div className="flex space-x-3 mt-6">
-                        <button
-                            onClick={handleAddToCart}
-                            className="bg-orange-500 hover:bg-orange-600 cursor-pointer text-white px-6 py-2 rounded shadow"
-                        >
-                            Thêm vào giỏ hàng
-                        </button>
-                        <button
-                            onClick={handleBuyNow}
-                            className="bg-white border cursor-pointer border-orange-500 text-orange-600 px-6 py-2 rounded hover:bg-orange-100"
-                        >
-                            Mua ngay
-                        </button>
-                    </div>
                 </div>
-            </div>
-        </div>
+            </div></motion.div>
     );
 }
 

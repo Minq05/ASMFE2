@@ -26,10 +26,10 @@ function Dashboard() {
   const [totalOrders, setTotalOrders] = useState<Order[]>([]);
   const [totalCustomers, setTotalCustomers] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [, setDeliveredCount] = useState(0);
-  const [, setProcessingCount] = useState(0);
   const [chartData, setChartData] = useState([]);
-
+  interface User {
+    role?: string;
+  }
   useEffect(() => {
     const fetchStats = async () => {
       try {
@@ -40,41 +40,34 @@ function Dashboard() {
         setTotalProducts(resProducts.data.length);
         setTotalOrders(resOrders.data.length);
 
-        // Lấy số lượng tài khoản có role là "staff"
-        const staffUsers = resUsers.data.filter(user => user.role === "staff").length;
+        // tong khach hang
+        const staffUsers = resUsers.data.filter((user: User) => user.role === "staff").length;
         setTotalCustomers(staffUsers);
-
         const revenue = resOrders.data.reduce(
           (sum: any, order: any) => sum + (order.totalPrice || 0),
           0
         );
         setTotalRevenue(revenue);
 
-        const delivered = resOrders.data.filter(
-          (o: any) => o.status === "Đã giao"
-        ).length;
-        const processing = resOrders.data.filter(
-          (o: any) => o.status === "Đang xử lý"
-        ).length;
+        // tong doanh thu
+        const grouped: Record<string, number> = {};
 
-        setDeliveredCount(delivered);
-        setProcessingCount(processing);
-
-        const grouped = {};
-        resOrders.data.forEach((order: any) => {
-          order.items.forEach((item: any) => {
+        resOrders.data.forEach((order: { items: { productName?: string; total: number }[] }) => {
+          order.items.forEach((item) => {
             const product = item.productName || "Sản phẩm khác";
             const revenue = item.total;
             grouped[product] = (grouped[product] || 0) + revenue;
           });
         });
 
+        // bang
         const chart = Object.keys(grouped).map((product) => ({
           product,
           revenue: grouped[product],
         }));
 
         setChartData(chart);
+
       } catch (error) {
         console.error("Lỗi load dữ liệu dashboard:", error);
       }

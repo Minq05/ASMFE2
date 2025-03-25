@@ -41,7 +41,7 @@
     {
       "id": "7752",
       "name": "Dior Addict EDP\t",
-      "stock": 100,
+      "stock": 98,
       "category": "Nữ",
       "brand": "Dior Sauvage ",
       "volume": [
@@ -117,7 +117,7 @@
     {
       "id": "073f",
       "name": "Coco Mademoiselle\t",
-      "stock": "100",
+      "stock": 93,
       "category": "Nữ",
       "brand": "CHANEL ",
       "image": "https://th.bing.com/th/id/OIP.YCuVMAkBcT8TaJLUsiX4iQHaHa?w=201&h=201&c=7&r=0&o=5&dpr=1.3&pid=1.7",
@@ -155,7 +155,7 @@
     {
       "id": "b334",
       "name": "Bleu de Chanel\t",
-      "stock": "100",
+      "stock": 95,
       "category": "Nam",
       "brand": "CHANEL ",
       "image": "https://th.bing.com/th/id/OIP.hMA5DfOPuaSOYA8gEm8KGwHaHa?w=157&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
@@ -874,33 +874,137 @@
   ],
   "orders": [
     {
-      "userId": "xCJnSDK",
-      "items": [],
-      "totalPrice": 250000,
-      "paymentMethod": "Credit Card",
-      "bank": "vietcombank",
-      "status": "Thanh toán thành công",
-      "createdAt": "2025-03-23T03:52:46.213Z",
-      "id": 2
-    },
-    {
-      "userId": "xCJnSDK",
+      "userId": "lQo1Gsg",
       "items": [
         {
-          "productId": "b038",
-          "productName": "Dior Homme Intense",
-          "volume": "100ml",
-          "quantity": 1,
-          "price": 250000,
-          "total": 250000
+          "productId": "073f",
+          "productName": "Coco Mademoiselle\t",
+          "volume": "150ml",
+          "quantity": 2,
+          "price": 280000,
+          "total": 560000
         }
       ],
-      "totalPrice": 250000,
+      "totalPrice": 560000,
       "paymentMethod": "COD",
       "bank": null,
       "status": "Đang xử lý",
-      "createdAt": "2025-03-23T03:53:01.126Z",
+      "createdAt": "2025-03-24T07:56:16.788Z",
+      "id": 2
+    },
+    {
+      "userId": "lQo1Gsg",
+      "items": [
+        {
+          "productId": "073f",
+          "productName": "Coco Mademoiselle\t",
+          "volume": "150ml",
+          "quantity": 2,
+          "price": 280000,
+          "total": 560000
+        }
+      ],
+      "totalPrice": 560000,
+      "paymentMethod": "Credit Card",
+      "bank": "vietcombank",
+      "status": "Thanh toán thành công",
+      "createdAt": "2025-03-24T07:56:57.310Z",
       "id": 3
+    },
+    {
+      "userId": "lQo1Gsg",
+      "items": [
+        {
+          "productId": "073f",
+          "productName": "Coco Mademoiselle\t",
+          "volume": "150ml",
+          "quantity": 1,
+          "price": 280000,
+          "total": 280000
+        }
+      ],
+      "totalPrice": 280000,
+      "paymentMethod": "COD",
+      "bank": null,
+      "status": "Đang xử lý",
+      "createdAt": "2025-03-24T07:57:12.221Z",
+      "id": 4
+    },
+    {
+      "userId": "lQo1Gsg",
+      "items": [
+        {
+          "productId": "073f",
+          "productName": "Coco Mademoiselle\t",
+          "volume": "150ml",
+          "quantity": 1,
+          "price": 280000,
+          "total": 280000
+        }
+      ],
+      "totalPrice": 280000,
+      "paymentMethod": "COD",
+      "bank": null,
+      "status": "Chờ xác nhận",
+      "createdAt": "2025-03-24T07:58:59.214Z",
+      "id": 5
+    },
+    {
+      "userId": "lQo1Gsg",
+      "items": [
+        {
+          "productId": "073f",
+          "productName": "Coco Mademoiselle\t",
+          "volume": "150ml",
+          "quantity": 1,
+          "price": 280000,
+          "total": 280000
+        }
+      ],
+      "totalPrice": 280000,
+      "paymentMethod": "Credit Card",
+      "bank": "vietcombank",
+      "status": "Thanh toán thành công",
+      "createdAt": "2025-03-24T07:59:12.410Z",
+      "id": 6
+    },
+    {
+      "userId": "lQo1Gsg",
+      "items": [
+        {
+          "productId": "073f",
+          "productName": "Coco Mademoiselle\t",
+          "volume": "150ml",
+          "quantity": 1,
+          "price": 280000,
+          "total": 280000
+        }
+      ],
+      "totalPrice": 280000,
+      "paymentMethod": "Credit Card",
+      "bank": "vietcombank",
+      "status": "Thanh toán thành công",
+      "createdAt": "2025-03-24T07:59:40.973Z",
+      "id": 7
+    },
+    {
+      "userId": "lQo1Gsg",
+      "items": [
+        {
+          "productId": "073f",
+          "productName": "Coco Mademoiselle\t",
+          "volume": "150ml",
+          "quantity": 1,
+          "price": 280000,
+          "total": 280000
+        }
+      ],
+      "totalPrice": 280000,
+      "paymentMethod": "COD",
+      "bank": null,
+      "status": "Chờ xác nhận",
+      "createdAt": "2025-03-24T07:59:48.350Z",
+      "id": 8
     }
   ],
   "users": [
