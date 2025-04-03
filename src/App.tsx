@@ -17,7 +17,7 @@ import Shop from "./page/client/Shop";
 import CategoriesProduct from "./page/client/Categories";
 import Cart from "./page/client/Cart";
 import ProductDetailClient from "./page/client/DetailProduct";
-import RequireAuth from "./components/RequireAuth";
+import RequireAuth from "./others/RequireAuth";
 import LoginClient from "./page/client/auth/Login";
 import Register from "./page/client/auth/Register";
 import LoginAdmin from "./page/admin/auth/Login";
@@ -27,6 +27,7 @@ import PaymentSuccess from "./page/client/PaymentSuccess";
 import OrderHistory from "./page/client/OrderHistory";
 import NotFound from "./page/client/NotFound";
 import NotFoundAdmin from "./page/admin/NotFound";
+import PaymentInfoPage from "./page/client/PaymentInfoPage";
 
 const routesConfig = [
   // Route đăng nhập, đăng ký
@@ -47,7 +48,7 @@ const routesConfig = [
       { path: "manage-order", element: <ManageOrders /> },
       { path: "manage-orders/:id", element: <ManageOrderDetail /> },
       { path: "manage-customer", element: <ManageCustomers /> },
-      { path: "customer-history/:customerName", element: <CustomerHistory /> },
+      { path: "customer-history/:userId", element: <CustomerHistory /> },
       { path: "product-form/:id", element: <FormProduct /> },
       { path: "product-form", element: <FormProduct /> },
       { path: "category-form/:id", element: <FormCategory /> },
@@ -74,6 +75,7 @@ const routesConfig = [
       { path: "payment", element: <PaymentPage /> },
       { path: "payment-success", element: <PaymentSuccess /> },
       { path: "order-history", element: <OrderHistory /> },
+      { path: "payment-info", element: <PaymentInfoPage /> },
       // NotFound riêng cho Client
       { path: "*", element: <NotFound /> },
     ],

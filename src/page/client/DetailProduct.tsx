@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Product, VolumeOption } from "../../type/type";
 import "react-toastify/dist/ReactToastify.css";
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
 import API from "../../services/api";
 
 function ProductDetailClient() {
     const { id } = useParams();
     const [product, setProduct] = useState<Product | null>(null);
     const [selectedVolume, setSelectedVolume] = useState<VolumeOption | null>(null);
+    const [quantity, setQuantity] = useState<number>(1);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [otherProducts, setOtherProducts] = useState<Product[]>([]);
     const [user, setUser] = useState<{ id: number } | null>(null);
     const nav = useNavigate();
 
@@ -32,6 +36,9 @@ function ProductDetailClient() {
                 const { data } = await API.get<Product>(`products/${id}`);
                 setProduct(data);
                 if (data.volume?.length > 0) setSelectedVolume(data.volume[0]);
+
+                const res = await API.get<Product[]>("products");
+                setOtherProducts(res.data.filter(p => p.id !== data.id));
             } catch (err) {
                 console.error("Lỗi lấy chi tiết sản phẩm:", err);
                 setError("Không thể tải sản phẩm.");
@@ -47,6 +54,19 @@ function ProductDetailClient() {
         const selected = product?.volume.find((v) => v.type === e.target.value) || null;
         setSelectedVolume(selected);
     };
+
+    const handleQuantityChange = (type: "increase" | "decrease") => {
+        setQuantity((prev) => (type === "increase" ? prev + 1 : prev > 1 ? prev - 1 : 1));
+    };
+
+    useEffect(() => {
+        try {
+            const userData = localStorage.getItem("user");
+            if (userData) setUser(JSON.parse(userData));
+        } catch (err) {
+            console.error("Lỗi khi lấy user từ localStorage:", err);
+        }
+    }, []);
 
     const handleBuyNow = () => {
         if (!user) {
@@ -121,22 +141,16 @@ function ProductDetailClient() {
         }
     };
 
-
     if (loading) return <div className="text-center py-10">Đang tải chi tiết sản phẩm...</div>;
     if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
             <div className="max-w-6xl mx-auto px-4 py-8">
                 <div className="grid md:grid-cols-2 gap-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
                     <div>
-                        <img src={product?.image} alt={product?.name} className="w-full rounded-lg shadow" />
+                        <img src={product?.image} alt={product?.name} className="w-96 h-96 rounded-lg shadow" />
                     </div>
-
                     <div>
                         <h2 className="text-3xl font-bold text-orange-600 mb-2">{product?.name}</h2>
                         <p className="text-sm text-gray-700 dark:text-gray-300">Thương hiệu: <strong>{product?.brand}</strong></p>
@@ -164,28 +178,36 @@ function ProductDetailClient() {
                             </div>
                         </div>
 
-                        <div className="my-4">
-                            <h4 className="text-lg font-semibold text-orange-500 mb-2">Mô tả sản phẩm:</h4>
-                            <p className="text-gray-700 dark:text-gray-200">{product?.description}</p>
+                        <div className="flex items-center space-x-4 my-4">
+                            <button onClick={() => handleQuantityChange("decrease")} className="px-3 py-1 border rounded">-</button>
+                            <span>{quantity}</span>
+                            <button onClick={() => handleQuantityChange("increase")} className="px-3 py-1 border rounded">+</button>
                         </div>
 
                         <div className="flex space-x-3 mt-6">
-                            <button
-                                onClick={handleAddToCart}
-                                className="bg-orange-500 hover:bg-orange-600 cursor-pointer text-white px-6 py-2 rounded shadow"
-                            >
-                                Thêm vào giỏ hàng
-                            </button>
-                            <button
-                                onClick={handleBuyNow}
-                                className="bg-white border cursor-pointer border-orange-500 text-orange-600 px-6 py-2 rounded hover:bg-orange-100"
-                            >
-                                Mua ngay
-                            </button>
+                            <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded shadow" onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
+                            <button className="bg-white border border-orange-500 text-orange-600 px-6 py-2 rounded hover:bg-orange-100" onClick={handleBuyNow}>Mua ngay</button>
                         </div>
                     </div>
                 </div>
-            </div></motion.div>
+            </div>
+
+            <div className="max-w-6xl mx-auto px-4 py-8">
+                <h2 className="text-2xl font-bold mb-4">Sản phẩm khác</h2>
+                <Swiper modules={[Navigation, Autoplay]} spaceBetween={30} slidesPerView={5} navigation autoplay={{ delay: 2000 }} loop={true} breakpoints={{ 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}>
+                    {otherProducts.map((product) => (
+                        <SwiperSlide key={product.id}>
+                            <Link to={`/shop/${product.id}`}>
+                                <div className="text-center p-4">
+                                    <img src={product.image} alt={product.name} className="rounded-full h-56 w-46 mx-auto transition transform hover:scale-105 hover:shadow-lg cursor-pointer" />
+                                    <p className="mt-2 font-semibold">{product.name}</p>
+                                </div>
+                            </Link>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+            </div>
+        </motion.div>
     );
 }
 

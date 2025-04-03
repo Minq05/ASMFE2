@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { motion } from "framer-motion"
+import { toast, ToastContainer } from "react-toastify";
+import { motion } from "framer-motion";
 import API from "../../services/api";
+import { message } from "antd";
 
 function OrderHistory() {
     const [orders, setOrders] = useState([]);
@@ -32,6 +33,17 @@ function OrderHistory() {
         fetchOrders();
     }, [user]);
 
+    const handleDeleteOrder = async (orderId: any) => {
+        try {
+            await API.delete(`orders/${orderId}`);
+            setOrders(orders.filter(order => order.id !== orderId));
+            message.success("Đơn hàng đã được hủy thành công!");
+        } catch (error) {
+            console.error("Lỗi khi hủy đơn hàng:", error);
+            toast.error("Không thể hủy đơn hàng.");
+        }
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -58,8 +70,22 @@ function OrderHistory() {
                                 <p className="font-bold mt-2">
                                     Tổng tiền: {order.totalPrice ? order.totalPrice.toLocaleString() : "0"} VND
                                 </p>
-
                                 <p className="text-green-500">Trạng thái: {order.status}</p>
+                                {order.status === "Đang xử lý" ? (
+                                    <button
+                                        onClick={() => handleDeleteOrder(order.id)}
+                                        className="mt-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                                    >
+                                        Hủy đơn hàng
+                                    </button>
+                                ) : (
+                                    <button
+                                        disabled
+                                        className="mt-2 bg-gray-300 text-white px-4 py-2 rounded-lg cursor-not-allowed"
+                                    >
+                                        Hủy đơn hàng
+                                    </button>
+                                )}
                             </li>
                         ))}
                     </ul>
@@ -67,7 +93,9 @@ function OrderHistory() {
                 <button onClick={() => navigate("/cart")} className="mt-4 cursor-pointer bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
                     Quay lại giỏ hàng
                 </button>
-            </div></motion.div>
+            </div>
+            <ToastContainer />
+        </motion.div>
     );
 }
 

@@ -1,5 +1,60 @@
 import { motion } from "framer-motion"
+import { useState } from "react";
+
 function Contact() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+    phone: "",
+  });
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleChange = (e: any) => {
+    const { name, phone, email, message, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+      [phone]: value,
+      [email]: value,
+      [message]: value
+    });
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMsg("");
+
+    try {
+      const response = await fetch(
+        "https://formsubmit.co/ajax/hoangquan22022005@gmail.com",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setFormData({ name: "", phone: "", email: "", message: "" });
+      } else {
+        setErrorMsg("Gửi thất bại, vui lòng thử lại sau.");
+      }
+    } catch (error) {
+      setErrorMsg("Lỗi mạng, vui lòng thử lại.");
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -25,51 +80,73 @@ function Contact() {
           <p className="text-center text-gray-600 mt-2">
             Hãy liên hệ ngay để nhận giải đáp !
           </p>
-          <form className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-gray-700 font-semibold">
-                  Họ và tên *
-                </label>
+          {isSubmitted ? (
+            <p className="text-green-400 text-lg font-semibold">
+              🎉 Cảm ơn bạn đã liên hệ. Mình sẽ phản hồi sớm nhất!
+            </p>
+          ) : (
+            <form onSubmit={handleSubmit} className="mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-700 font-semibold">
+                    Họ và tên *
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-3 border rounded-lg"
+                    placeholder="Nhập họ và tên"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-semibold">
+                    Số điện thoại *
+                  </label>
+                  <input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-3 border rounded-lg"
+                    placeholder="Nhập số điện thoại"
+                  />
+                </div>
+              </div>
+              <div className="mt-4">
+                <label className="block text-gray-700 font-semibold">Email *</label>
                 <input
-                  type="text"
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
                   className="w-full p-3 border rounded-lg"
-                  placeholder="Nhập họ và tên"
+                  placeholder="Nhập email"
                 />
               </div>
-              <div>
+              <div className="mt-4">
                 <label className="block text-gray-700 font-semibold">
-                  Số điện thoại *
+                  Nội dung *
                 </label>
-                <input
-                  type="text"
+                <textarea
                   className="w-full p-3 border rounded-lg"
-                  placeholder="Nhập số điện thoại"
+                  placeholder="Nhập yêu cầu của bạn"
+                  name="message"
+                  required
+                  value={formData.message}
+                  onChange={handleChange}
+                  defaultValue={""}
                 />
               </div>
-            </div>
-            <div className="mt-4">
-              <label className="block text-gray-700 font-semibold">Email *</label>
-              <input
-                type="email"
-                className="w-full p-3 border rounded-lg"
-                placeholder="Nhập email"
-              />
-            </div>
-            <div className="mt-4">
-              <label className="block text-gray-700 font-semibold">
-                Nội dung *
-              </label>
-              <textarea
-                className="w-full p-3 border rounded-lg"
-                placeholder="Nhập yêu cầu của bạn"
-                defaultValue={""}
-              />
-            </div>
-            <button className="mt-6 w-full cursor-pointer bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition shadow-lg">
-              Liên hệ
-            </button>
-          </form>
+              {errorMsg && <p className="text-red-400 mb-3">{errorMsg}</p>}
+              <button disabled={isLoading} className="mt-6 w-full cursor-pointer bg-orange-500 text-white py-3 rounded-lg hover:bg-orange-600 transition shadow-lg">
+                {isLoading ? "Đang gửi..." : "Send"}
+              </button>
+            </form>)}
         </div>
       </div></motion.div>
   );

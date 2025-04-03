@@ -40,20 +40,6 @@ function ManageCustomers() {
     }
   };
 
-
-  const handleDelete = async (id: string) => {
-    if (confirm("Xác nhận xóa khách hàng?")) {
-      try {
-        await API.delete(`users/${id}`);
-        fetchCustomers();
-        message.success("Xóa khách hàng thành công!");
-      } catch (err) {
-        console.error("Lỗi khi xóa khách hàng:", err);
-        message.error("Lỗi khi xóa khách hàng!");
-      }
-    }
-  };
-
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
     const filtered = customers.filter((c) =>
@@ -96,14 +82,6 @@ function ManageCustomers() {
       width: 160,
       render: (_, record) => (
         <>
-          <Button
-            danger
-            size="small"
-            style={{ marginRight: 8 }}
-            onClick={() => handleDelete(record.id)}
-          >
-            Xóa
-          </Button>
           <Link
             to={`/admin/customer-history/${encodeURIComponent(record.fullname)}`}
           >

@@ -50,18 +50,6 @@ const ManageOrders = () => {
     }
   };
 
-  const handleDeleteOrder = async (orderId:any) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa đơn hàng này?")) return;
-    try {
-      await API.delete(`orders/${orderId}`);
-      setOrders(orders.filter(order => order.id !== orderId));
-      message.success("Xóa đơn hàng thành công!");
-    } catch (error) {
-      console.log(error);
-      message.error("Lỗi khi xóa đơn hàng");
-    }
-  };
-
   const columns = [
     { title: "Mã đơn hàng", dataIndex: "id", key: "id" },
     { title: "Người mua", dataIndex: "userId", key: "userId", render: getUserName },
@@ -85,16 +73,7 @@ const ManageOrders = () => {
         </Select>
       )
     },
-    { title: "Ngày đặt hàng", dataIndex: "createdAt", key: "createdAt" },
-    {
-      title: "Hành động",
-      key: "actions",
-      render: (_:any, record:any) => (
-        <Button danger onClick={() => handleDeleteOrder(record.id)}>
-          Xóa đơn hàng
-        </Button>
-      )
-    }
+    { title: "Ngày đặt hàng", dataIndex: "createdAt", key: "createdAt" }
   ];
 
   return (

@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
+import { Table, Typography, message } from "antd";
 import { useParams } from "react-router-dom";
-import { Table } from "antd";
-import { Order, Product } from "../../type/type";
-import { motion } from "framer-motion";
 import API from "../../services/api";
+import { Order } from "../../type/type";
+
+const { Title } = Typography;
 
 function CustomerHistory() {
-  const { customerName } = useParams<{ customerName: string }>();
+  const { customerName } = useParams();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     fetchOrders();
-    fetchProducts();
   }, []);
 
   const fetchOrders = async () => {
@@ -23,131 +22,32 @@ function CustomerHistory() {
         (order) => order.customerName === customerName
       );
       setOrders(customerOrders);
-    } catch (error) {
-      console.error("Lỗi khi tải đơn hàng:", error);
+    } catch (err) {
+      console.error("Lỗi khi tải đơn hàng:", err);
+      message.error("Lỗi khi tải đơn hàng!");
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchProducts = async () => {
-    try {
-      const res = await API.get<Product[]>("products");
-      setProducts(res.data);
-    } catch (error) {
-      console.error("Lỗi khi tải sản phẩm:", error);
-    }
-  };
-
-  const getProductImage = (productName: string): string => {
-    const product = products.find((p) =>
-      p.name.toLowerCase().includes(productName.toLowerCase())
-    );
-    return product?.image || "https://via.placeholder.com/100";
-  };
-
   const columns = [
-    {
-      title: "ID",
-      key: "id",
-      render: (_: any, __: any, index: number) => index + 1,
-    },
-    {
-      title: "Hình",
-      dataIndex: "productName",
-      key: "image",
-      render: (productName: string) => (
-        <img
-          src={getProductImage(productName)}
-          alt={productName}
-          style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 4 }}
-        />
-      ),
-    },
+    { title: "Mã đơn hàng", dataIndex: "id", key: "id" },
     {
       title: "Sản phẩm",
-      dataIndex: "productName",
-      key: "productName",
+      dataIndex: "products",
+      key: "products",
+      render: (products: { name: string; quantity: number }[]) =>
+        products.map((p) => `${p.name} (x${p.quantity})`).join(", "),
     },
-    {
-      title: "Số lượng",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Đơn giá",
-      dataIndex: "price",
-      key: "price",
-      render: (price: number) => `${price.toLocaleString()}đ`,
-    },
-    {
-      title: "Tổng tiền",
-      dataIndex: "total",
-      key: "total",
-      render: (total: number) => `${total.toLocaleString()}đ`,
-    },
-    {
-      title: "Trạng thái",
-      dataIndex: "status",
-      key: "status",
-      render: (status: string) => (
-        <span
-          style={{
-            padding: "4px 12px",
-            borderRadius: "999px",
-            fontSize: 12,
-            backgroundColor:
-              status === "Đã giao"
-                ? "#d1fae5"
-                : status === "Đang xử lý"
-                ? "#fef3c7"
-                : "#e5e7eb",
-            color:
-              status === "Đã giao"
-                ? "#065f46"
-                : status === "Đang xử lý"
-                ? "#92400e"
-                : "#374151",
-          }}
-        >
-          {status}
-        </span>
-      ),
-    },
+    { title: "Tổng tiền", dataIndex: "totalAmount", key: "totalAmount" },
+    { title: "Trạng thái", dataIndex: "status", key: "status" },
   ];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.4 }}
-    >
-      <h2
-        style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "16px" }}
-      >
-        Lịch sử đơn hàng của {customerName}
-      </h2>
-
-      {loading ? (
-        <p>Đang tải dữ liệu...</p>
-      ) : orders.length === 0 ? (
-        <p>Không có đơn hàng nào.</p>
-      ) : (
-        <div
-          style={{
-            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            borderRadius: "8px",
-          }}
-        >
-          <Table
-            columns={columns}
-            dataSource={orders}
-            rowKey="id"
-            pagination={{ pageSize: 5 }}
-          />
-        </div>
-      )}
-    </motion.div>
+    <div style={{ padding: 24 }}>
+      <Title level={3}>Lịch sử mua hàng của {customerName}</Title>
+      <Table columns={columns} dataSource={orders} rowKey="id" loading={loading} bordered />
+    </div>
   );
 }
 
