@@ -2,11 +2,12 @@ import { Outlet, useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useCart } from "../../../contexts/cartContext";
+import { Link } from "react-router-dom";  // Import Link từ react-router-dom
 
 function ClientLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const { cartQuantity } = useCart(); // Lấy tổng số lượng sản phẩm trong giỏ hàng
+  const { cartQuantity } = useCart(); 
 
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -17,7 +18,7 @@ function ClientLayout() {
     localStorage.removeItem("user");
     setIsLoggedIn(false);
     toast.success("Đăng xuất thành công!");
-    navigate("/"); // Chuyển về trang Home sau khi logout
+    navigate("/"); 
   };
 
   return (
@@ -34,28 +35,28 @@ function ClientLayout() {
             <nav className="w-full">
               <ul className="flex justify-center space-x-8">
                 <li>
-                  <a
-                    href="/"
+                  <Link
+                    to="/"
                     className="text-gray-700 hover:text-orange-500 transition flex items-center"
                   >
                     <i className="fas fa-home" /> Home
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="/shop"
+                  <Link
+                    to="/shop"
                     className="text-gray-700 hover:text-orange-500 transition flex items-center"
                   >
                     <i className="fas fa-store mr-2" /> Shop
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="/contact"
+                  <Link
+                    to="/contact"
                     className="text-gray-700 hover:text-orange-500 transition flex items-center"
                   >
                     <i className="fas fa-envelope mr-2" /> Contact
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
@@ -69,15 +70,15 @@ function ClientLayout() {
                 Log out
               </button>
             ) : (
-              <a
-                href="/login-client"
+              <Link
+                to="/login-client"
                 className="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 transition"
               >
                 Sign in
-              </a>
+              </Link>
             )}
-            <a
-              href="/cart"
+            <Link
+              to="/cart"
               className="relative text-gray-700 hover:text-orange-500 transition"
             >
               <i className="fas fa-shopping-cart" />
@@ -86,7 +87,7 @@ function ClientLayout() {
                   {cartQuantity}
                 </span>
               )}
-            </a>
+            </Link>
           </div>
         </div>
       </header>

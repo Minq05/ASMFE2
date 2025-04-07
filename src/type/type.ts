@@ -44,15 +44,15 @@ export interface Product {
   image: string;
   description: string;
   createdAt: string;
-  key: string
+  key: string;
 }
 
 export interface CartItem {
-  id: number;
   productId: number;
   productName: string;
+  volume: string;
   quantity: number;
   price: number;
   total: number;
-  userId: number;
+  image?: string; 
 }

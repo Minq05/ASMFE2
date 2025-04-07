@@ -35,9 +35,8 @@ function Cart() {
     fetchCart();
   }, [user]);
 
-  // Sử dụng optimistic update: cập nhật state ngay, sau đó update lên API
   const updateCart = async (updatedItems: any) => {
-    setCartItems(updatedItems); // cập nhật giao diện ngay lập tức
+    setCartItems(updatedItems);
     if (!user) return;
     try {
       const res = await API.get(`orders?userId=${user.id}`);
@@ -86,22 +85,24 @@ function Cart() {
         <>
           <ul>
             {cartItems.map((item, index) => (
-              <li key={index} className="flex justify-between p-4 border-b items-center">
+              <li
+                key={index}
+                className="flex justify-between items-center p-4 border-b"
+              >
                 <div className="flex items-center">
-                  {item.image && (
-                    <img
-                      src={item.image}
-                      alt={item.productName}
-                      className="w-16 h-16 object-cover rounded mr-2"
-                    />
-                  )}
-                  <span>
-                    {item.productName} - {item.volume}
-                  </span>
+                  <img
+                    src={item.image || "/default-image.png"} // ảnh mặc định nếu không có
+                    alt={item.productName}
+                    className="w-16 h-16 object-cover rounded mr-3 border"
+                  />
+                  <div>
+                    <p className="font-semibold">{item.productName}</p>
+                    <p className="text-sm text-gray-500">Dung tích: {item.volume}</p>
+                  </div>
                 </div>
+
                 <div className="flex items-center">
                   <button
-                    type="button"
                     className="px-3 py-1 bg-gray-300 rounded-l hover:bg-gray-400"
                     onClick={() => handleDecrease(index)}
                   >
@@ -109,14 +110,17 @@ function Cart() {
                   </button>
                   <span className="px-4">{item.quantity}</span>
                   <button
-                    type="button"
                     className="px-3 py-1 bg-gray-300 rounded-r hover:bg-gray-400"
                     onClick={() => handleIncrease(index)}
                   >
                     +
                   </button>
                 </div>
-                <span>{(item.price * item.quantity).toLocaleString()} VND</span>
+
+                <span className="font-medium">
+                  {(item.price * item.quantity).toLocaleString()} VND
+                </span>
+
                 <button
                   type="button"
                   className="text-red-500 hover:text-red-700 ml-4"
@@ -127,9 +131,11 @@ function Cart() {
               </li>
             ))}
           </ul>
+
           <h3 className="text-xl font-semibold mt-4">
             Tổng tiền: {totalPrice.toLocaleString()} VND
           </h3>
+
           <button
             type="button"
             onClick={() => navigate("/payment", { state: { cartItems, totalPrice } })}

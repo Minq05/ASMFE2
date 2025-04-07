@@ -1,4 +1,3 @@
-// src/vnpay.ts
 import * as CryptoJS from "crypto-js";
 
 const vnp_TmnCode = "CBAYBK24";
@@ -10,6 +9,7 @@ export interface VnpayParams {
   [key: string]: string | number;
 }
 
+// Hàm sắp xếp các tham số theo thứ tự bảng chữ cái
 const sortObject = (obj: VnpayParams): VnpayParams => {
   const sorted: VnpayParams = {};
   Object.keys(obj)
@@ -32,7 +32,7 @@ export const createPaymentUrl = (
     .replace(/[-T:.Z]/g, "")
     .slice(0, 14);
 
-  // Giả sử IP của khách hàng (có thể lấy từ window.location hoặc gán tĩnh cho assignment)
+  // Giả sử IP của khách hàng
   const ipAddr = "127.0.0.1";
 
   // Thiết lập các tham số theo yêu cầu của VNPAY
@@ -42,19 +42,19 @@ export const createPaymentUrl = (
     vnp_TmnCode: vnp_TmnCode,
     vnp_Locale: "vn",
     vnp_CurrCode: "VND",
-    vnp_TxnRef: orderId, // Mã giao dịch duy nhất
+    vnp_TxnRef: orderId,
     vnp_OrderInfo: orderInfo,
-    vnp_OrderType: "other",
-    vnp_Amount: amount * 100, // Số tiền tính theo đơn vị "x100"
+    vnp_OrderType: "billpayment",
+    vnp_Amount: amount * 100, // Số tiền tính theo đơn vị x100
     vnp_ReturnUrl: vnp_ReturnUrl,
     vnp_IpAddr: ipAddr,
     vnp_CreateDate: createDate,
   };
 
-  // Sắp xếp tham số theo thứ tự bảng chữ cái
+  // Sắp xếp các tham số theo thứ tự bảng chữ cái
   vnp_Params = sortObject(vnp_Params);
 
-  // Tạo chuỗi để ký
+  // Tạo chuỗi ký không cần URL encode
   const signData = Object.keys(vnp_Params)
     .map((key) => `${key}=${vnp_Params[key]}`)
     .join("&");
@@ -63,14 +63,17 @@ export const createPaymentUrl = (
   const hmac = CryptoJS.HmacSHA512(signData, vnp_HashSecret);
   const secureHash = CryptoJS.enc.Hex.stringify(hmac);
 
-  // Thêm chữ ký vào tham số
+  // Thêm chữ ký và loại chữ ký vào tham số
   vnp_Params["vnp_SecureHashType"] = "HMAC-SHA512";
   vnp_Params["vnp_SecureHash"] = secureHash;
 
-  // Tạo query string
+  // Tạo query string với các tham số được URL encode
   const queryString = Object.keys(vnp_Params)
     .map((key) => `${key}=${encodeURIComponent(vnp_Params[key].toString())}`)
     .join("&");
+
+  console.log("Sign Data:", signData);
+  console.log("Secure Hash:", secureHash);
 
   return `${vnp_Url}?${queryString}`;
 };
