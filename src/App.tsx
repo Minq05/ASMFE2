@@ -28,6 +28,7 @@ import OrderHistory from "./page/client/OrderHistory";
 import NotFound from "./page/client/NotFound";
 import NotFoundAdmin from "./page/admin/NotFound";
 import PaymentInfoPage from "./page/client/PaymentInfoPage";
+import { CartProvider } from "./contexts/cartContext";
 
 const routesConfig = [
   // Route đăng nhập, đăng ký
@@ -64,7 +65,11 @@ const routesConfig = [
   // Route CLIENT
   {
     path: "/",
-    element: <ClientLayout />,
+    element: (
+      <CartProvider>
+        <ClientLayout />
+      </CartProvider>
+    ),
     children: [
       { path: "/", element: <Home /> },
       { path: "shop", element: <Shop /> },
@@ -81,7 +86,6 @@ const routesConfig = [
     ],
   },
 ];
-
 
 function App() {
   const routes = useRoutes(routesConfig);

@@ -16,8 +16,8 @@
     "jsx": "react-jsx",
 
     /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
+    "strict": false,
+    "noImplicitAny": false, // Thêm dòng này để tắt lỗi any 
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true

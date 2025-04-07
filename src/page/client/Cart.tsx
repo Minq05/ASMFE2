@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { CartItem } from "../../type/type";
 import API from "../../services/api";
+
 function Cart() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [user, setUser] = useState(null);
@@ -18,7 +19,6 @@ function Cart() {
   useEffect(() => {
     const fetchCart = async () => {
       if (!user) return;
-
       try {
         const res = await API.get(`orders?userId=${user.id}`);
         if (res.data.length > 0) {
@@ -35,19 +35,16 @@ function Cart() {
     fetchCart();
   }, [user]);
 
+  // Sử dụng optimistic update: cập nhật state ngay, sau đó update lên API
   const updateCart = async (updatedItems: any) => {
-    if (!user) {
-      await API.put(`orders/${user.id}`, { items: [] });
-      setCartItems([]);
-    }
-
+    setCartItems(updatedItems); // cập nhật giao diện ngay lập tức
+    if (!user) return;
     try {
       const res = await API.get(`orders?userId=${user.id}`);
       if (res.data.length > 0) {
         const order = res.data[0];
         order.items = updatedItems;
         await API.put(`orders/${order.id}`, order);
-        setCartItems(updatedItems);
       }
     } catch (error) {
       console.error("Lỗi cập nhật giỏ hàng:", error);
@@ -90,9 +87,21 @@ function Cart() {
           <ul>
             {cartItems.map((item, index) => (
               <li key={index} className="flex justify-between p-4 border-b items-center">
-                <span>{item.productName} - {item.volume} </span>
+                <div className="flex items-center">
+                  {item.image && (
+                    <img
+                      src={item.image}
+                      alt={item.productName}
+                      className="w-16 h-16 object-cover rounded mr-2"
+                    />
+                  )}
+                  <span>
+                    {item.productName} - {item.volume}
+                  </span>
+                </div>
                 <div className="flex items-center">
                   <button
+                    type="button"
                     className="px-3 py-1 bg-gray-300 rounded-l hover:bg-gray-400"
                     onClick={() => handleDecrease(index)}
                   >
@@ -100,6 +109,7 @@ function Cart() {
                   </button>
                   <span className="px-4">{item.quantity}</span>
                   <button
+                    type="button"
                     className="px-3 py-1 bg-gray-300 rounded-r hover:bg-gray-400"
                     onClick={() => handleIncrease(index)}
                   >
@@ -108,6 +118,7 @@ function Cart() {
                 </div>
                 <span>{(item.price * item.quantity).toLocaleString()} VND</span>
                 <button
+                  type="button"
                   className="text-red-500 hover:text-red-700 ml-4"
                   onClick={() => handleRemove(index)}
                 >
@@ -116,8 +127,11 @@ function Cart() {
               </li>
             ))}
           </ul>
-          <h3 className="text-xl font-semibold mt-4">Tổng tiền: {totalPrice.toLocaleString()} VND</h3>
+          <h3 className="text-xl font-semibold mt-4">
+            Tổng tiền: {totalPrice.toLocaleString()} VND
+          </h3>
           <button
+            type="button"
             onClick={() => navigate("/payment", { state: { cartItems, totalPrice } })}
             className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-lg mr-2 hover:bg-orange-600 transition cursor-pointer"
           >
@@ -125,7 +139,11 @@ function Cart() {
           </button>
         </>
       )}
-      <button onClick={() => navigate("/order-history")} className="mt-4 cursor-pointer bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600">
+      <button
+        type="button"
+        onClick={() => navigate("/order-history")}
+        className="mt-4 cursor-pointer bg-gray-500 text-white px-6 py-2 rounded-lg hover:bg-gray-600"
+      >
         Xem lịch sử đơn hàng
       </button>
       <ToastContainer />

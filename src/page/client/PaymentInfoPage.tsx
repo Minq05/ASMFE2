@@ -12,7 +12,7 @@ interface LocationState {
 
 const PaymentInfoPage: React.FC = () => {
     const location = useLocation();
-    const { cartItems, totalPrice } = (location.state as LocationState) || { cartItems: [], totalPrice: 0 };
+    const { totalPrice } = (location.state as LocationState) || { cartItems: [], totalPrice: 0 };
 
     const [user, setUser] = useState<{ id: string } | null>(null);
     const [testCard, setTestCard] = useState({

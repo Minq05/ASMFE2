@@ -7,7 +7,8 @@ import { Order } from "../../type/type";
 const { Title } = Typography;
 
 function CustomerHistory() {
-  const { customerName } = useParams();
+  // Sử dụng customerId thay vì customerName
+  const { customerId } = useParams<{ customerId: string }>();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -18,8 +19,9 @@ function CustomerHistory() {
   const fetchOrders = async () => {
     try {
       const res = await API.get<Order[]>("orders");
+      // Lọc đơn hàng theo userId (chuyển về string để so sánh)
       const customerOrders = res.data.filter(
-        (order) => order.customerName === customerName
+        (order) => String(order.userId) === customerId
       );
       setOrders(customerOrders);
     } catch (err) {
@@ -34,18 +36,32 @@ function CustomerHistory() {
     { title: "Mã đơn hàng", dataIndex: "id", key: "id" },
     {
       title: "Sản phẩm",
-      dataIndex: "products",
-      key: "products",
-      render: (products: { name: string; quantity: number }[]) =>
-        products.map((p) => `${p.name} (x${p.quantity})`).join(", "),
+      dataIndex: "items",
+      key: "items",
+      render: (items: any[]) =>
+        items
+          .map(
+            (p) =>
+              `${p.productName ? p.productName.trim() : "Sản phẩm không có tên"} (x${p.quantity})`
+          )
+          .join(", "),
     },
-    { title: "Tổng tiền", dataIndex: "totalAmount", key: "totalAmount" },
+    {
+      title: "Tổng tiền",
+      key: "totalAmount",
+      render: (_: any, record: any) => {
+        const total = record.totalPrice
+          ? record.totalPrice
+          : record.items.reduce((acc: number, item: any) => acc + item.total, 0);
+        return total.toLocaleString() + " VND";
+      },
+    },
     { title: "Trạng thái", dataIndex: "status", key: "status" },
   ];
 
   return (
     <div style={{ padding: 24 }}>
-      <Title level={3}>Lịch sử mua hàng của {customerName}</Title>
+      <Title level={3}>Lịch sử mua hàng của khách hàng {customerId}</Title>
       <Table columns={columns} dataSource={orders} rowKey="id" loading={loading} bordered />
     </div>
   );

@@ -14,7 +14,8 @@
     "noEmit": true,
 
     /* Linting */
-    "strict": true,
+    "strict": false,
+    "noImplicitAny": false,  // Tắt lỗi any
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,

@@ -29,6 +29,7 @@ function ManageCustomers() {
   const fetchCustomers = async () => {
     try {
       const res = await API.get<User[]>("users");
+      // Lọc các user có role là "staff" hoặc role khác tùy theo mục đích (ở đây dùng cho khách hàng)
       const staffUsers = res.data.filter((user) => user.role === "staff");
       setCustomers(staffUsers);
       setFilteredCustomers(staffUsers);
@@ -43,7 +44,7 @@ function ManageCustomers() {
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
     const filtered = customers.filter((c) =>
-      c.name.toLowerCase().includes(value.toLowerCase())
+      c.fullname.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredCustomers(filtered);
   };
@@ -82,9 +83,7 @@ function ManageCustomers() {
       width: 160,
       render: (_, record) => (
         <>
-          <Link
-            to={`/admin/customer-history/${encodeURIComponent(record.fullname)}`}
-          >
+          <Link to={`/admin/customer-history/${record.id}`}>
             <Button type="primary" size="small" ghost>
               History
             </Button>

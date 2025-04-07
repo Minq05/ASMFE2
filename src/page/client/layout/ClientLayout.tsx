@@ -1,13 +1,14 @@
 import { Outlet, useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
+import { useCart } from "../../../contexts/cartContext";
 
 function ClientLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const { cartQuantity } = useCart(); // Lấy tổng số lượng sản phẩm trong giỏ hàng
 
   useEffect(() => {
-    // Kiểm tra trạng thái đăng nhập từ localStorage
     const user = localStorage.getItem("user");
     setIsLoggedIn(!!user);
   }, []);
@@ -59,7 +60,7 @@ function ClientLayout() {
               </ul>
             </nav>
           </div>
-          <div className="space-x-4">
+          <div className="space-x-4 relative">
             {isLoggedIn ? (
               <button
                 onClick={handleLogout}
@@ -77,9 +78,14 @@ function ClientLayout() {
             )}
             <a
               href="/cart"
-              className="text-gray-700 hover:text-orange-500 transition"
+              className="relative text-gray-700 hover:text-orange-500 transition"
             >
               <i className="fas fa-shopping-cart" />
+              {cartQuantity > 0 && (
+                <span className="absolute -top-1 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                  {cartQuantity}
+                </span>
+              )}
             </a>
           </div>
         </div>

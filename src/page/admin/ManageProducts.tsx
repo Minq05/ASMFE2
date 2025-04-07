@@ -1,5 +1,4 @@
-// page/admin/ManageProducts.tsx
-import { Table, Button, Space, message, Image } from "antd";
+import { Table, Button, Space, message, Image, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import { Product } from "../../type/type";
 import { useNavigate } from "react-router";
@@ -32,15 +31,12 @@ function ManageProducts() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Bạn có chắc chắn muốn xoá sản phẩm này?")) {
-      try {
-        await API.delete(`products/${id}`);
-        message.success("Đã xoá sản phẩm thành công!");
-        fetchProduct();
-      } catch (error) {
-        console.error("Lỗi xoá sản phẩm:", error);
-        message.error("Xoá sản phẩm thất bại!");
-      }
+    try {
+      await API.delete(`products/${id}`);
+      message.success("Xoá sản phẩm thành công!");
+    } catch (error) {
+      console.error("Lỗi xoá sản phẩm:", error);
+      message.error("Xoá sản phẩm thất bại!");
     }
   };
 
@@ -103,9 +99,16 @@ function ManageProducts() {
             Chi tiết
           </Button>
           <Button onClick={() => handleEdit(record)}>Sửa</Button>
-          <Button onClick={() => handleDelete(record.id)} danger>
-            Xoá
-          </Button>
+          <Popconfirm
+            title="Bạn có chắc chắn muốn xoá sản phẩm này?"
+            onConfirm={() => handleDelete(record.id)}
+            okText="Có"
+            cancelText="Không"
+          >
+            <Button type="primary" danger>
+              Xoá
+            </Button>
+          </Popconfirm>
         </Space>
       ),
     },

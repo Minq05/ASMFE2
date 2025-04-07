@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { Product, VolumeOption } from "../../type/type";
-import "react-toastify/dist/ReactToastify.css";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
@@ -58,7 +57,6 @@ function ProductDetailClient() {
     const handleQuantityChange = (type: "increase" | "decrease") => {
         setQuantity((prev) => (type === "increase" ? prev + 1 : prev > 1 ? prev - 1 : 1));
     };
-
     useEffect(() => {
         try {
             const userData = localStorage.getItem("user");
@@ -68,7 +66,8 @@ function ProductDetailClient() {
         }
     }, []);
 
-    const handleBuyNow = () => {
+    const handleBuyNow = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
         if (!user) {
             toast.warning("Vui lòng đăng nhập để mua hàng!");
             return;
@@ -80,16 +79,16 @@ function ProductDetailClient() {
             productId: product.id,
             productName: product.name,
             volume: selectedVolume.type,
-            quantity: 1,
+            quantity: quantity,
             price: selectedVolume.price,
-            total: selectedVolume.price * 1
+            total: selectedVolume.price * quantity
         };
 
         nav("/payment", { state: { cartItems: [newItem], totalPrice: newItem.total } });
     };
 
-
-    const handleAddToCart = async () => {
+    const handleAddToCart = async (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
         if (!user) {
             toast.warning("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
             return;
@@ -106,9 +105,9 @@ function ProductDetailClient() {
                 productId: product.id,
                 productName: product.name,
                 volume: selectedVolume.type,
-                quantity: 1,
+                quantity: quantity,
                 price: selectedVolume.price,
-                total: selectedVolume.price * 1
+                total: selectedVolume.price * quantity
             };
 
             if (existingOrder) {
@@ -117,9 +116,10 @@ function ProductDetailClient() {
                 );
 
                 if (existingItemIndex !== -1) {
-                    existingOrder.items[existingItemIndex].quantity += 1;
+                    existingOrder.items[existingItemIndex].quantity += quantity;
                     existingOrder.items[existingItemIndex].total =
-                        existingOrder.items[existingItemIndex].quantity * existingOrder.items[existingItemIndex].price;
+                        existingOrder.items[existingItemIndex].quantity *
+                        existingOrder.items[existingItemIndex].price;
                 } else {
                     existingOrder.items.push(newItem);
                 }
@@ -132,9 +132,7 @@ function ProductDetailClient() {
                 };
                 await API.post(`orders`, newOrder);
             }
-
-            toast.success("Đã thêm vào giỏ hàng!");
-            nav("/cart");
+            alert("Đã thêm vào giỏ hàng!");
         } catch (err) {
             console.error("Lỗi thêm giỏ hàng:", err);
             toast.error("Thêm vào giỏ hàng thất bại!");
@@ -153,9 +151,15 @@ function ProductDetailClient() {
                     </div>
                     <div>
                         <h2 className="text-3xl font-bold text-orange-600 mb-2">{product?.name}</h2>
-                        <p className="text-sm text-gray-700 dark:text-gray-300">Thương hiệu: <strong>{product?.brand}</strong></p>
-                        <p className="text-sm text-gray-700 dark:text-gray-300">Danh mục: <strong>{product?.category}</strong></p>
-                        <p className="text-sm text-gray-700 dark:text-gray-300">Tồn kho: <strong>{product?.stock}</strong></p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
+                            Thương hiệu: <strong>{product?.brand}</strong>
+                        </p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
+                            Danh mục: <strong>{product?.category}</strong>
+                        </p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">
+                            Tồn kho: <strong>{product?.stock}</strong>
+                        </p>
 
                         <div className="my-4">
                             <h4 className="text-lg font-semibold text-orange-500 mb-2">Chọn dung tích:</h4>
@@ -185,8 +189,20 @@ function ProductDetailClient() {
                         </div>
 
                         <div className="flex space-x-3 mt-6">
-                            <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded shadow" onClick={handleAddToCart}>Thêm vào giỏ hàng</button>
-                            <button className="bg-white border border-orange-500 text-orange-600 px-6 py-2 rounded hover:bg-orange-100" onClick={handleBuyNow}>Mua ngay</button>
+                            <button
+                                type="button"
+                                className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded shadow"
+                                onClick={handleAddToCart}
+                            >
+                                Thêm vào giỏ hàng
+                            </button>
+                            <button
+                                type="button"
+                                className="bg-white border border-orange-500 text-orange-600 px-6 py-2 rounded hover:bg-orange-100"
+                                onClick={handleBuyNow}
+                            >
+                                Mua ngay
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -194,7 +210,15 @@ function ProductDetailClient() {
 
             <div className="max-w-6xl mx-auto px-4 py-8">
                 <h2 className="text-2xl font-bold mb-4">Sản phẩm khác</h2>
-                <Swiper modules={[Navigation, Autoplay]} spaceBetween={30} slidesPerView={5} navigation autoplay={{ delay: 2000 }} loop={true} breakpoints={{ 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}>
+                <Swiper
+                    modules={[Navigation, Autoplay]}
+                    spaceBetween={30}
+                    slidesPerView={5}
+                    navigation
+                    autoplay={{ delay: 2000 }}
+                    loop={true}
+                    breakpoints={{ 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
+                >
                     {otherProducts.map((product) => (
                         <SwiperSlide key={product.id}>
                             <Link to={`/shop/${product.id}`}>
