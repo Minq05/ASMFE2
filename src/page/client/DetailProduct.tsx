@@ -20,6 +20,7 @@ function ProductDetailClient() {
   const [otherProducts, setOtherProducts] = useState<Product[]>([]);
   const [user, setUser] = useState<{ id: number } | null>(null);
   const nav = useNavigate();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     try {
@@ -78,7 +79,6 @@ function ProductDetailClient() {
       toast.warning("Vui lòng đăng nhập để mua hàng!");
       return;
     }
-
     if (!product || !selectedVolume) return;
 
     const newItem = {
@@ -96,8 +96,6 @@ function ProductDetailClient() {
     });
   };
 
-  const { updateCart } = useCart(); // Make sure you're using the updateCart function
-
   const handleAddToCart = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (!user) {
@@ -107,47 +105,20 @@ function ProductDetailClient() {
 
     if (!product || !selectedVolume) return;
 
+    const newItem = {
+      productId: product.id,
+      productName: product.name,
+      volume: selectedVolume.type,
+      image: product.image,
+      quantity: quantity,
+      price: selectedVolume.price,
+      total: selectedVolume.price * quantity,
+    };
+
     try {
-      const res = await API.get(`orders?userId=${user.id}`);
-      const orders = Array.isArray(res.data) ? res.data : [];
-      let existingOrder = orders[0];
-
-      const newItem = {
-        productId: product.id,
-        productName: product.name,
-        volume: selectedVolume.type,
-        image: product.image,
-        quantity: quantity,
-        price: selectedVolume.price,
-        total: selectedVolume.price * quantity,
-      };
-
-      if (existingOrder) {
-        const existingItemIndex = existingOrder.items.findIndex(
-          (item: any) =>
-            item.productId === product.id && item.volume === selectedVolume.type
-        );
-
-        if (existingItemIndex !== -1) {
-          existingOrder.items[existingItemIndex].quantity += quantity;
-          existingOrder.items[existingItemIndex].total =
-            existingOrder.items[existingItemIndex].quantity *
-            existingOrder.items[existingItemIndex].price;
-        } else {
-          existingOrder.items.push(newItem);
-        }
-
-        await API.put(`orders/${existingOrder.id}`, existingOrder);
-        updateCart(existingOrder.items); // Update cart in context
-      } else {
-        const newOrder = {
-          userId: user.id,
-          items: [newItem],
-        };
-        await API.post(`orders`, newOrder);
-        updateCart([newItem]); // Update cart in context
-      }
-      toast.success("Đã thêm vào giỏ hàng!");
+      await addToCart(newItem); // chỉ gọi context xử lý
+      toast.success(`Đã thêm "${product.name}" vào giỏ hàng!`);
+      setQuantity(1); // reset về 1 sau khi thêm
     } catch (err) {
       console.error("Lỗi thêm giỏ hàng:", err);
       toast.error("Thêm vào giỏ hàng thất bại!");

@@ -7,22 +7,34 @@ import { Order } from "../../type/type";
 const { Title } = Typography;
 
 function CustomerHistory() {
-  // Sử dụng customerId thay vì customerName
   const { customerId } = useParams<{ customerId: string }>();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetchOrders();
-  }, []);
+    if (customerId) {
+      fetchOrders();
+    }
+  }, [customerId]); // Reload orders when customerId changes
 
   const fetchOrders = async () => {
     try {
       const res = await API.get<Order[]>("orders");
-      // Lọc đơn hàng theo userId (chuyển về string để so sánh)
+      console.log(res.data); // Log the API response to inspect
+      
+      // Lọc các đơn hàng có trạng thái thanh toán thành công và mua hàng thành công
       const customerOrders = res.data.filter(
-        (order) => String(order.userId) === customerId
+        (order) => String(order.userId) === customerId &&
+                    (order.status === "Thanh toán thành công" || order.status === "Hoàn tất mua hàng")
       );
+
+      console.log(customerOrders); // Log customer orders to inspect
+
+      // Kiểm tra nếu không có đơn hàng nào được tìm thấy
+      if (customerOrders.length === 0) {
+        message.warning("Không có đơn hàng nào cho khách hàng này với trạng thái thành công.");
+      }
+
       setOrders(customerOrders);
     } catch (err) {
       console.error("Lỗi khi tải đơn hàng:", err);
@@ -50,9 +62,10 @@ function CustomerHistory() {
       title: "Tổng tiền",
       key: "totalAmount",
       render: (_: any, record: any) => {
+        // Đảm bảo totalPrice tồn tại; nếu không, tính toán dựa trên items
         const total = record.totalPrice
           ? record.totalPrice
-          : record.items.reduce((acc: number, item: any) => acc + item.total, 0);
+          : record.items.reduce((acc: number, item: any) => acc + (item.total || 0), 0);
         return total.toLocaleString() + " VND";
       },
     },

@@ -17,7 +17,11 @@ const ManageOrders = () => {
   const fetchOrders = async () => {
     try {
       const res = await API.get("orders");
-      setOrders(res.data);
+      const sortedOrders = res.data.sort(
+        (a: Order, b: Order) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setOrders(sortedOrders);
     } catch (error) {
       console.log(error);
       message.error("Lỗi khi tải đơn hàng");
@@ -89,7 +93,11 @@ const ManageOrders = () => {
         </Select>
       ),
     },
-    { title: "Ngày đặt hàng", dataIndex: "createdAt", key: "createdAt" },
+    {
+      title: "Ngày đặt hàng",
+      dataIndex: "createdAt",
+      key: "createdAt",
+    },
   ];
 
   return (

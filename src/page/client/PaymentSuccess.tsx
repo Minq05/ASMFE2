@@ -24,10 +24,10 @@ function PaymentSuccess() {
       ) : (
         <>
           <h2 className="text-2xl font-bold text-green-500 mb-4">
-            {paymentMethod === "Credit Card" ? "Thanh toán thành công!" : "Đơn hàng đã được tạo thành công!"}
+            {paymentMethod === "vnpay" ? "Thanh toán thành công!" : "Đơn hàng đã được tạo thành công!"}
           </h2>
           <p className="text-lg">
-            {paymentMethod === "Credit Card"
+            {paymentMethod === "vnpay"
               ? `Tổng tiền đã thanh toán: ${totalPrice.toLocaleString()} VND`
               : `Bạn sẽ thanh toán ${totalPrice.toLocaleString()} VND khi nhận hàng.`}
           </p>

@@ -15,11 +15,14 @@ interface CartContextType {
   cartItems: CartItem[];
   updateCart: (updatedItems: CartItem[]) => Promise<void>;
   cartQuantity: number;
+  addToCart: (item: CartItem) => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
@@ -58,8 +61,50 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
   const cartQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
+  const addToCart = async (item: CartItem) => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return;
+    const user = JSON.parse(storedUser);
+
+    try {
+      const res = await API.get(`orders?userId=${user.id}`);
+      const orders = Array.isArray(res.data) ? res.data : [];
+      let order = orders[0];
+
+      if (order) {
+        const existingItemIndex = order.items.findIndex(
+          (i: CartItem) =>
+            i.productId === item.productId && i.volume === item.volume
+        );
+
+        if (existingItemIndex !== -1) {
+          order.items[existingItemIndex].quantity += item.quantity;
+          order.items[existingItemIndex].total =
+            order.items[existingItemIndex].quantity *
+            order.items[existingItemIndex].price;
+        } else {
+          order.items.push(item);
+        }
+
+        await API.put(`orders/${order.id}`, order);
+        setCartItems(order.items);
+      } else {
+        const newOrder = {
+          userId: user.id,
+          items: [item],
+        };
+        const res = await API.post(`orders`, newOrder);
+        setCartItems(res.data.items);
+      }
+    } catch (err) {
+      console.error("Lỗi khi thêm vào giỏ hàng:", err);
+    }
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, updateCart, cartQuantity }}>
+    <CartContext.Provider
+      value={{ cartItems, addToCart, updateCart, cartQuantity }}
+    >
       {children}
     </CartContext.Provider>
   );

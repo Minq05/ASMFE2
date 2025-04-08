@@ -49,7 +49,7 @@ const routesConfig = [
       { path: "manage-order", element: <ManageOrders /> },
       { path: "manage-orders/:id", element: <ManageOrderDetail /> },
       { path: "manage-customer", element: <ManageCustomers /> },
-      { path: "customer-history/:userId", element: <CustomerHistory /> },
+      { path: "customer-history/:customerId", element: <CustomerHistory /> },
       { path: "product-form/:id", element: <FormProduct /> },
       { path: "product-form", element: <FormProduct /> },
       { path: "category-form/:id", element: <FormCategory /> },

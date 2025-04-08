@@ -5,16 +5,17 @@ import { Link } from "react-router-dom";
 import { User } from "../../type/type";
 import { motion } from "framer-motion";
 import API from "../../services/api";
+import { debounce } from "lodash"; // Adding debounce for improved search performance
 
 const { Title } = Typography;
 const { Search } = Input;
 
 export type Customer = {
-  fullname: string,
-  address: string,
-  email: string,
-  phone: string
-}
+  fullname: string;
+  address: string;
+  email: string;
+  phone: string;
+};
 
 function ManageCustomers() {
   const [customers, setCustomers] = useState<User[]>([]);
@@ -41,13 +42,14 @@ function ManageCustomers() {
     }
   };
 
-  const handleSearchChange = (value: string) => {
+  // Debounced search handler
+  const handleSearchChange = debounce((value: string) => {
     setSearchTerm(value);
     const filtered = customers.filter((c) =>
       c.fullname.toLowerCase().includes(value.toLowerCase())
     );
     setFilteredCustomers(filtered);
-  };
+  }, 300); // 300ms debounce delay
 
   const columns: ColumnsType<Customer> = [
     {
@@ -106,8 +108,7 @@ function ManageCustomers() {
         <Search
           placeholder="Tìm theo tên khách hàng..."
           allowClear
-          onSearch={handleSearchChange}
-          onChange={(e) => handleSearchChange(e.target.value)}
+          onChange={(e) => handleSearchChange(e.target.value)} // Trigger on change with debounce
           style={{ width: 300, marginBottom: 16 }}
           value={searchTerm}
         />
