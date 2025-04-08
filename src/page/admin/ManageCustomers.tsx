@@ -11,6 +11,7 @@ const { Title } = Typography;
 const { Search } = Input;
 
 export type Customer = {
+  id: string;
   fullname: string;
   address: string;
   email: string;

@@ -8,18 +8,22 @@ export interface Order {
   productId: string | null;
   quantity: number;
   price: number;
+  userId: string;
+  createdAt: string;
   total: number;
   status: "Đã giao" | "Đang xử lý" | "Đã hủy" | string; // có thể mở rộng nếu có thêm status khác
 }
 
 export interface User {
   id: string;
+  userId: string;
   fullname: string;
   phone: string;
   address: string;
   confirmPassword: string;
   email: string;
   password: string;
+  createdAt: string;
   role: "admin" | "staff" | string; // mở rộng nếu có thêm quyền
 }
 
@@ -38,7 +42,7 @@ export interface Product {
   id: string;
   name: string;
   stock: number;
-  category: string;
+  category: any;
   brand: string;
   volume: VolumeOption[];
   image: string;
@@ -54,5 +58,5 @@ export interface CartItem {
   quantity: number;
   price: number;
   total: number;
-  image?: string; 
+  image?: string;
 }

@@ -41,7 +41,9 @@ function Dashboard() {
         setTotalOrders(resOrders.data.length);
 
         // tong khach hang
-        const staffUsers = resUsers.data.filter((user: User) => user.role === "staff").length;
+        const staffUsers = resUsers.data.filter(
+          (user: User) => user.role === "staff"
+        ).length;
         setTotalCustomers(staffUsers);
         const revenue = resOrders.data.reduce(
           (sum: any, order: any) => sum + (order.totalPrice || 0),
@@ -52,13 +54,15 @@ function Dashboard() {
         // tong doanh thu
         const grouped: Record<string, number> = {};
 
-        resOrders.data.forEach((order: { items: { productName?: string; total: number }[] }) => {
-          order.items.forEach((item) => {
-            const product = item.productName || "Sản phẩm khác";
-            const revenue = item.total;
-            grouped[product] = (grouped[product] || 0) + revenue;
-          });
-        });
+        resOrders.data.forEach(
+          (order: { items: { productName?: string; total: number }[] }) => {
+            order.items.forEach((item) => {
+              const product = item.productName || "Sản phẩm khác";
+              const revenue = item.total;
+              grouped[product] = (grouped[product] || 0) + revenue;
+            });
+          }
+        );
 
         // bang
         const chart = Object.keys(grouped).map((product) => ({
@@ -67,7 +71,6 @@ function Dashboard() {
         }));
 
         setChartData(chart);
-
       } catch (error) {
         console.error("Lỗi load dữ liệu dashboard:", error);
       }
@@ -80,26 +83,27 @@ function Dashboard() {
     <div>
       <Title level={2}>Tổng quan</Title>
       <Row gutter={[16, 16]}>
-        {[{
-          title: "Tổng đơn hàng",
-          value: totalOrders,
-          icon: <ShoppingCartOutlined style={{ color: "#1677ff" }} />,
-        },
-        {
-          title: "Sản phẩm",
-          value: totalProducts,
-          icon: <BoxPlotOutlined style={{ color: "#52c41a" }} />,
-        },
-        {
-          title: "Khách hàng (Staff)",
-          value: totalCustomers,
-          icon: <UserOutlined style={{ color: "#faad14" }} />,
-        },
-        {
-          title: "Doanh thu (₫)",
-          value: totalRevenue.toLocaleString(),
-          icon: <DollarOutlined style={{ color: "#ff4d4f" }} />,
-        },
+        {[
+          {
+            title: "Tổng đơn hàng",
+            value: totalOrders,
+            icon: <ShoppingCartOutlined style={{ color: "#1677ff" }} />,
+          },
+          {
+            title: "Sản phẩm",
+            value: totalProducts,
+            icon: <BoxPlotOutlined style={{ color: "#52c41a" }} />,
+          },
+          {
+            title: "Khách hàng (Staff)",
+            value: totalCustomers,
+            icon: <UserOutlined style={{ color: "#faad14" }} />,
+          },
+          {
+            title: "Doanh thu (₫)",
+            value: totalRevenue.toLocaleString(),
+            icon: <DollarOutlined style={{ color: "#ff4d4f" }} />,
+          },
         ].map((item, index) => (
           <Col xs={24} sm={12} md={12} lg={6} key={index}>
             <motion.div
@@ -110,8 +114,17 @@ function Dashboard() {
             >
               <Card>
                 <Statistic
-                  title={<span>{item.icon} {item.title}</span>}
-                  value={item.value}
+                  title={
+                    <span>
+                      {item.icon} {item.title}
+                    </span>
+                  }
+                  value={
+                    typeof item.value === "number" ||
+                    typeof item.value === "string"
+                      ? item.value
+                      : ""
+                  }
                 />
               </Card>
             </motion.div>
@@ -124,7 +137,10 @@ function Dashboard() {
       <Title level={3}>Biểu đồ doanh thu theo sản phẩm</Title>
       <Card>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+          <BarChart
+            data={chartData}
+            margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
+          >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="product" />
             <YAxis />
