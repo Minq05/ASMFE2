@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FormEvent } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createPaymentUrl } from "../../others/vnpay";
@@ -17,8 +17,6 @@ const PaymentInfoPage: React.FC = () => {
     totalPrice: 0,
   };
 
-  const navigate = useNavigate();
-
   const [user, setUser] = useState<{ id: string } | null>(null);
   const [testCard, setTestCard] = useState({
     bank: "",
@@ -35,7 +33,7 @@ const PaymentInfoPage: React.FC = () => {
     }
   }, []);
 
-  // Hàm xử lý thanh toán VNPay (lưu đơn hàng vào DB và chuyển hướng tới trang thông báo)
+  // Hàm xử lý thanh toán VNPay (lưu đơn hàng vào DB và chuyển hướng tới cổng thanh toán VNPay)
   const handlePaymentSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!user) {
@@ -98,21 +96,16 @@ const PaymentInfoPage: React.FC = () => {
       }
       const jsonResponseData = await jsonResponse.json();
       console.log("Order saved:", jsonResponseData);
-      // Tạo URL thanh toán VNPay (nếu cần sử dụng sau)
+      
+      // Tạo URL thanh toán VNPay (dùng thông tin đơn hàng và tổng tiền)
       const orderInfo = `Thanh toán đơn hàng của user ${user.id}`;
       const amount = totalPrice;
       const orderId = Date.now().toString();
       const paymentUrl = createPaymentUrl(orderInfo, amount, orderId);
       console.log("Payment URL:", paymentUrl);
 
-      // Chuyển hướng tới trang thông báo của VNPay (VD: /payment-success)
-      navigate("/payment-success", {
-        state: {
-          totalPrice,
-          paymentMethod: "vnpay",
-          paymentUrl, 
-        },
-      });
+      // Chuyển hướng trực tiếp tới cổng thanh toán VNPay
+      window.location.href = paymentUrl;
     } catch (error) {
       toast.error("Có lỗi xảy ra khi lưu đơn hàng");
       console.error("Lỗi:", error);

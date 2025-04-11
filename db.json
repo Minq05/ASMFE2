@@ -884,7 +884,58 @@
       "id": 1
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "userId": "lQo1Gsg",
+      "items": [],
+      "totalPrice": 250000,
+      "paymentMethod": "vnpay",
+      "bank": "NCB",
+      "status": "Thanh toán thành công",
+      "createdAt": "2025-04-08T06:14:22.906Z",
+      "id": 2
+    },
+    {
+      "userId": "lQo1Gsg",
+      "items": [
+        {
+          "volume": "100ml",
+          "quantity": 1,
+          "price": 250000,
+          "total": 250000
+        }
+      ],
+      "totalPrice": 250000,
+      "paymentMethod": "vnpay",
+      "bank": "NCB",
+      "status": "Thanh toán thành công",
+      "createdAt": "2025-04-08T06:14:39.774Z",
+      "id": 3
+    },
+    {
+      "userId": "lQo1Gsg",
+      "items": [
+        {
+          "volume": "100ml",
+          "quantity": 3,
+          "price": 250000,
+          "total": 750000
+        },
+        {
+          "volume": "100ml",
+          "quantity": 1,
+          "price": 250000,
+          "total": 250000
+        }
+      ],
+      "totalPrice": 1000000,
+      "paymentMethod": "vnpay",
+      "bank": "NCB",
+      "status": "Thanh toán thành công",
+      "createdAt": "2025-04-11T15:03:15.443Z",
+      "id": 4
+    }
+  ],
   "users": [
     {
       "id": "1",
